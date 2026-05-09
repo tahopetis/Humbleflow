@@ -1,0 +1,31 @@
+{
+  "name": "humbleflow",
+  "version": "0.1.0",
+  "description": "Agent-first SDLC workflow based on OpenAI's Harness Engineering principles. Skills, prompt templates, and project initialization tools for agent-driven development — from prompt to production with mechanical enforcement of architecture, taste, and quality.",
+  "keywords": [
+    "pi-package",
+    "sdlc",
+    "agent-workflow",
+    "harness-engineering",
+    "code-review",
+    "ci-cd",
+    "linting",
+    "quality-grading"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tahopetis/humbleflow"
+  },
+  "pi": {
+    "skills": ["./skills"],
+    "prompts": ["./prompts"]
+  },
+  "files": [
+    "skills/",
+    "prompts/",
+    "templates/",
+    "init-harness.py",
+    "README.md"
+  ]
+}
