@@ -21,11 +21,15 @@
     "skills": ["./skills"],
     "prompts": ["./prompts"]
   },
+  "bin": {
+    "humbleflow": "./humbleflow"
+  },
+  "preferGlobal": true,
   "files": [
     "skills/",
     "prompts/",
     "templates/",
-    "init-harness.py",
+    "humbleflow",
     "README.md"
   ]
 }

@@ -1,30 +1,22 @@
 #!/usr/bin/env python3
 """
-init-harness.py — Initialize the Humbleflow workflow into any project.
+humbleflow — Agent-first SDLC workflow, one command to initialize any project.
 
 USAGE:
-  python3 init-harness.py <target-dir> [options]
+  humbleflow init <target-dir> [options]
+  humbleflow version
+  humbleflow help
 
-OPTIONS:
-  --greenfield         Initialize for a new/empty project
-  --brownfield         Initialize into an existing codebase
-  --name NAME          Project name (required for greenfield)
-  --description DESC   Short project description
-  --domains DOMAINS    Comma-separated domain names (e.g., "auth,billing,users")
-  --force              Overwrite existing harness files
-  --dry-run            Show what would be done without doing it
-  --harness-path DIR   Path to harness package root (default: script's directory)
-  --templates-path DIR Path to templates directory (default: harness-path/templates)
-  --non-interactive    Disable interactive prompts (useful for CI)
-
-EXAMPLES:
-  python3 init-harness.py ~/projects/myapp --greenfield --name "MyApp" --domains "auth,billing"
-  python3 init-harness.py ~/projects/existing-app --brownfield
-  python3 init-harness.py ~/projects/myapp --name "MyApp" --domains "auth" --dry-run
-  python3 init-harness.py ~/projects/myapp --greenfield --name "MyApp" --domains "core" --non-interactive
+INIT EXAMPLES:
+  humbleflow init ~/projects/myapp --greenfield --name "MyApp" --domains "auth,billing"
+  humbleflow init ~/projects/existing-app --brownfield
+  humbleflow init ~/projects/myapp --name "MyApp" --domains "auth" --dry-run
+  humbleflow init ~/projects/myapp --greenfield --name "MyApp" --domains "core" -y
+  humbleflow init . --name "MyApp" --domains "auth"      # init current dir
 """
 
 import argparse
+import json
 import os
 import re
 import shutil
@@ -36,8 +28,8 @@ from typing import Dict, List, Optional, Set, Tuple
 
 # ── Constants ────────────────────────────────────────────────────────────────
 
-# Relative paths within templates/ — these are the files that get copied
-# to the target project. Source files live under harness_path/templates/.
+VERSION = None  # lazy-loaded from package.json
+
 HARNESS_FILES = [
     "AGENTS.md",
     "WORKFLOW.md",
@@ -107,6 +99,22 @@ def ensure_dir(path: Path) -> None:
 
 def next_week(today_val: date) -> str:
     return (today_val + timedelta(days=7)).isoformat()
+
+
+def get_package_dir() -> Path:
+    return Path(__file__).resolve().parent
+
+
+def get_version() -> str:
+    global VERSION
+    if VERSION is None:
+        pkg_json = get_package_dir() / "package.json"
+        try:
+            data = json.loads(pkg_json.read_text(encoding="utf-8"))
+            VERSION = data.get("version", "0.0.0")
+        except (FileNotFoundError, json.JSONDecodeError):
+            VERSION = "0.0.0"
+    return VERSION
 
 
 # ── Generated content ────────────────────────────────────────────────────────
@@ -590,16 +598,29 @@ class HarnessInit:
 
 # ── CLI ──────────────────────────────────────────────────────────────────────
 
-def main() -> int:
+def cmd_version() -> int:
+    ver = get_version()
+    print(f"humbleflow v{ver}")
+    return 0
+
+
+def cmd_help() -> int:
+    print(__doc__)
+    return 0
+
+
+def cmd_init(argv: List[str]) -> int:
     parser = argparse.ArgumentParser(
-        description="Initialize the Humbleflow workflow into any project.",
+        prog="humbleflow init",
+        description="Initialize the Humbleflow SDLC workflow into a project.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 EXAMPLES:
-  python3 init-harness.py ~/projects/myapp --greenfield --name "MyApp" --domains "auth,billing"
-  python3 init-harness.py ~/projects/existing-app --brownfield
-  python3 init-harness.py ~/projects/myapp --name "MyApp" --domains "auth" --dry-run
-  python3 init-harness.py ~/projects/myapp --greenfield --name "MyApp" --domains "core" --non-interactive
+  humbleflow init ~/projects/myapp --greenfield --name "MyApp" --domains "auth,billing"
+  humbleflow init ~/projects/existing-app --brownfield
+  humbleflow init . --name "MyApp" --domains "auth"
+  humbleflow init ~/projects/myapp --name "MyApp" --domains "auth" --dry-run
+  humbleflow init ~/projects/myapp --greenfield --name "MyApp" --domains "core" -y
         """)
     parser.add_argument("target", help="Target project directory")
     parser.add_argument("--greenfield", action="store_true",
@@ -618,11 +639,11 @@ EXAMPLES:
     parser.add_argument("--harness-path", default="",
                         help="Path to harness package root")
     parser.add_argument("--templates-path", default="",
-                        help="Path to templates directory (default: harness-path/templates)")
-    parser.add_argument("--non-interactive", action="store_true",
+                        help="Path to templates directory")
+    parser.add_argument("-y", "--non-interactive", action="store_true",
                         help="Disable interactive prompts (for CI)")
 
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     if args.greenfield and args.brownfield:
         print("Error: Cannot specify both --greenfield and --brownfield.",
@@ -633,7 +654,7 @@ EXAMPLES:
         "brownfield" if args.brownfield else "auto")
 
     harness_path = Path(args.harness_path) if args.harness_path else (
-        Path(__file__).resolve().parent)
+        get_package_dir())
 
     if args.templates_path:
         templates_path = Path(args.templates_path)
@@ -661,6 +682,34 @@ EXAMPLES:
         interactive=not args.non_interactive,
     )
     return init.run()
+
+
+SUBCOMMANDS = {
+    "init": cmd_init,
+    "version": lambda _: cmd_version(),
+    "help": lambda _: cmd_help(),
+}
+
+
+def main() -> int:
+    if len(sys.argv) < 2:
+        return cmd_help()
+
+    subcmd = sys.argv[1]
+    rest = sys.argv[2:]
+
+    if subcmd in ("-h", "--help"):
+        return cmd_help()
+    if subcmd in ("-v", "--version"):
+        return cmd_version()
+
+    handler = SUBCOMMANDS.get(subcmd)
+    if handler is None:
+        print(f"humbleflow: unknown subcommand '{subcmd}'", file=sys.stderr)
+        print("Available: init, version, help", file=sys.stderr)
+        return 1
+
+    return handler(rest)
 
 
 if __name__ == "__main__":
