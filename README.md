@@ -7,10 +7,21 @@ A Pi package for agent-first SDLC — based on [OpenAI's Harness Engineering pri
 ## Quick Install
 
 ```bash
-pi install git:github.com/user/humbleflow
+# Option A: npm (CLI on PATH + Pi resources)
+npm install -g humbleflow
 
-# Then in your project:
-python3 ~/.pi/agent/git/github.com/user/humbleflow/init-harness.py . --greenfield --name "MyApp"
+# Option B: Pi package (skill + prompts, CLI via full path)
+pi install git:github.com/tahopetis/humbleflow
+```
+
+Then initialize your project:
+
+```bash
+# Option A users: just run the command
+humbleflow init . --greenfield --name "MyApp" --domains "auth,billing"
+
+# Option B users: use the full path
+~/.pi/agent/git/github.com/tahopetis/humbleflow/humbleflow init . --greenfield --name "MyApp"
 ```
 
 ---
@@ -21,7 +32,7 @@ python3 ~/.pi/agent/git/github.com/user/humbleflow/init-harness.py . --greenfiel
 |-----------|-------------|
 | **`humbleflow` skill** | Loaded automatically by agents for any SDLC work. Covers all 7 phases: specify → plan → implement → review → QA → merge → maintain. |
 | **5 prompt templates** | `/implement`, `/review`, `/qa`, `/garbage-collect`, `/plan-feature` — one-shot workflows for common tasks. |
-| **`init-harness.py`** | One-command project initialization. Greenfield or brownfield. Generates architecture docs, quality tables, and `AGENTS.md` customized to your project. |
+| **`humbleflow` CLI** | One-command project initialization (`humbleflow init`). Greenfield or brownfield. Generates architecture docs, quality tables, and `AGENTS.md` customized to your project. |
 | **7 enforcement tools** | Python linters for boundary validation, golden-principle checks, quality grading, doc gardening, plan validation — plus a `Makefile` that ties them together. |
 
 ---
@@ -31,7 +42,7 @@ python3 ~/.pi/agent/git/github.com/user/humbleflow/init-harness.py . --greenfiel
 ### Greenfield (new project)
 
 ```bash
-init-harness.py ~/projects/myapp --greenfield --name "MyApp" --domains "auth,billing,users"
+humbleflow init ~/projects/myapp --greenfield --name "MyApp" --domains "auth,billing,users"
 cd ~/projects/myapp
 # Agents now auto-load the humbleflow skill. Just prompt:
 #   "Add two-factor authentication to the login flow"
@@ -40,7 +51,7 @@ cd ~/projects/myapp
 ### Brownfield (existing codebase)
 
 ```bash
-init-harness.py ~/projects/existing-app --brownfield
+humbleflow init ~/projects/existing-app --brownfield
 # Auto-discovers domains from src/domains/*, grades existing code, warns on overwrites
 cd ~/projects/existing-app
 make all   # Run linters and quality checks on existing code
@@ -49,8 +60,15 @@ make all   # Run linters and quality checks on existing code
 ### Interactive mode
 
 ```bash
-init-harness.py ~/projects/myapp
+humbleflow init ~/projects/myapp
 # Prompts for project name, description, domains, and mode
+```
+
+### Dry run
+
+```bash
+humbleflow init ~/projects/myapp --greenfield --name "MyApp" --dry-run
+# Shows what would be created without writing anything
 ```
 
 ---
@@ -59,10 +77,9 @@ init-harness.py ~/projects/myapp
 
 ```
 humbleflow/
-├── init-harness.py              ← Project initialization
+├── humbleflow                   ← CLI: humbleflow init / humbleflow version
 ├── AGENTS.md                    ← Agent entry point (TOC ~100 lines)
 ├── WORKFLOW.md                  ← Human-readable SDLC guide
-├── Makefile                     ← make lint / make quality / make garden
 │
 ├── skills/humbleflow/         ← Pi skill (loaded on-demand by agents)
 │   ├── SKILL.md
@@ -78,23 +95,11 @@ humbleflow/
 │   ├── garbage-collect.md       ← /garbage-collect: drift scan → refactor
 │   └── plan-feature.md          ← /plan-feature: spec → execution plan
 │
-├── docs/                        ← System of record (templates)
-│   ├── architecture.md          ← Domain map + layered model
-│   ├── quality.md               ← A→F grading per domain
-│   └── principles.md            ← 7 golden principles with examples
-│
-├── plans/                       ← Execution plan infrastructure
-│   ├── template.md              ← Full plan (multi-day, cross-domain)
-│   └── template-lightweight.md  ← Lightweight plan (< 1 day)
-│
-└── tools/                       ← Mechanical enforcement
-    ├── lint-boundaries.py       ← Dependency direction validator
-    ├── lint-golden.py           ← Golden principle validator
-    ├── quality-grade.py         ← Domain quality scanner
-    ├── doc-gardener.py          ← Stale documentation finder
-    ├── validate-plan.py         ← Plan structure validator
-    ├── ci-config.yml            ← CI pipeline configuration
-    └── Makefile                 ← One-command orchestrator
+└── templates/                   ← Project scaffolding (copied by humbleflow init)
+    ├── AGENTS.md, WORKFLOW.md, Makefile
+    ├── docs/                    ← System of record templates
+    ├── plans/                   ← Execution plan infrastructure
+    └── tools/                   ← Mechanical enforcement
 ```
 
 ---
