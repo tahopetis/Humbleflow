@@ -12,7 +12,8 @@ $ARGUMENTS
 ### 1. Clarify
 Ask ONE clarifying question if anything is ambiguous. Pick the single most important unknown. Do not ask multiple questions — resolve one at a time.
 
-### 2. Research
+### 2. Load Context
+- Read `SPEC.md` for project vision, users, MVP, and constraints
 - Read `docs/architecture.md` to identify affected domains
 - Read `docs/quality.md` to understand current grades in those domains
 - Check `plans/` for related or conflicting plans
