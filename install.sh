@@ -10,7 +10,7 @@ set -euo pipefail
 #   ./install.sh                          # from a local clone
 
 REPO_URL="https://github.com/tahopetis/Humbleflow.git"
-REPO_DIR="${HOME}/.humbleflow"
+INSTALL_DIR="${HOME}/.humbleflow"
 
 BOLD="\033[1m"
 GREEN="\033[32m"
@@ -34,43 +34,39 @@ say ""
 say "${BOLD}humbleflow installer${RESET}"
 say ""
 
-# Are we running from inside a humbleflow clone?
 if [ -f "./humbleflow" ] && [ -d "./skills" ]; then
     SCRIPT_DIR="$(pwd)"
     ok "Using local clone: ${SCRIPT_DIR}"
 else
-    # Running from curl pipe — clone the repo
-    info "Cloning humbleflow..."
-    if [ -d "${REPO_DIR}" ]; then
-        info "Updating existing clone at ${REPO_DIR}..."
-        (cd "${REPO_DIR}" && git pull --ff-only 2>/dev/null) || true
+    if [ -d "${INSTALL_DIR}" ]; then
+        info "Updating ${INSTALL_DIR}..."
+        (cd "${INSTALL_DIR}" && git pull --ff-only 2>/dev/null) || true
     else
-        git clone --depth 1 "${REPO_URL}" "${REPO_DIR}" 2>/dev/null || {
+        info "Cloning to ${INSTALL_DIR}..."
+        git clone --depth 1 "${REPO_URL}" "${INSTALL_DIR}" 2>/dev/null || {
             err "Failed to clone ${REPO_URL}"
-            say "  Try manually: git clone ${REPO_URL} && cd humbleflow && ./install.sh"
+            say "  Try: git clone ${REPO_URL} && cd Humbleflow && ./install.sh"
             exit 1
         }
     fi
-    SCRIPT_DIR="${REPO_DIR}"
+    SCRIPT_DIR="${INSTALL_DIR}"
     ok "Ready: ${SCRIPT_DIR}"
 fi
 
 # ── Detect platforms ─────────────────────────────────────────────────────────
 
-# Pi detection
 if command -v pi &>/dev/null; then
     PI_AVAILABLE=true
-    ok "Pi detected ($(pi --version 2>/dev/null || echo 'unknown version'))"
+    ok "Pi detected"
 else
-    warn "Pi not found — skipping Pi install"
+    warn "Pi not found — skipping"
 fi
 
-# Claude Code detection
 if command -v claude &>/dev/null; then
     CLAUDE_AVAILABLE=true
-    ok "Claude Code detected ($(claude --version 2>/dev/null || echo 'unknown version'))"
+    ok "Claude Code detected"
 else
-    warn "Claude Code not found — skipping Claude Code install"
+    warn "Claude Code not found — skipping"
 fi
 
 # ── Pi install ───────────────────────────────────────────────────────────────
@@ -80,26 +76,22 @@ if $PI_AVAILABLE; then
     say "${BOLD}── Pi ──${RESET}"
 
     if pi list 2>/dev/null | grep -q "humbleflow"; then
-        ok "humbleflow already installed for Pi"
+        ok "Already installed for Pi"
     else
-        info "Installing for Pi..."
+        info "Installing..."
         if pi install "git:file://${SCRIPT_DIR}" 2>/dev/null; then
-            ok "Installed via pi"
+            ok "Installed"
+        elif pi install git:github.com/tahopetis/Humbleflow 2>/dev/null; then
+            ok "Installed (from GitHub)"
         else
-            info "Trying GitHub fallback..."
-            if pi install git:github.com/tahopetis/humbleflow 2>/dev/null; then
-                ok "Installed via pi (from GitHub)"
-            else
-                warn "pi install failed, manual setup..."
-                PI_SKILLS="${HOME}/.pi/agent/skills/humbleflow"
-                PI_PROMPTS="${HOME}/.pi/agent/prompts"
-                mkdir -p "${PI_SKILLS}" "${PI_PROMPTS}"
-                cp -r "${SCRIPT_DIR}/skills/humbleflow/"* "${PI_SKILLS}/"
-                cp "${SCRIPT_DIR}/prompts/"*.md "${PI_PROMPTS}/"
-                ok "Skills → ${PI_SKILLS}"
-                ok "Prompts → ${PI_PROMPTS}"
-                warn "Restart Pi to load the skill"
-            fi
+            warn "pi install failed, manual setup..."
+            PI_SKILLS="${HOME}/.pi/agent/skills/humbleflow"
+            PI_PROMPTS="${HOME}/.pi/agent/prompts"
+            mkdir -p "${PI_SKILLS}" "${PI_PROMPTS}"
+            cp -r "${SCRIPT_DIR}/skills/humbleflow/"* "${PI_SKILLS}/"
+            cp "${SCRIPT_DIR}/prompts/"*.md "${PI_PROMPTS}/"
+            ok "Skills → ${PI_SKILLS}"
+            ok "Prompts → ${PI_PROMPTS}"
         fi
     fi
 fi
@@ -110,19 +102,24 @@ if $CLAUDE_AVAILABLE; then
     say ""
     say "${BOLD}── Claude Code ──${RESET}"
 
-    CC_PLUGIN="${HOME}/.claude/plugins/humbleflow"
+    # Claude Code loads plugins via --plugin-dir (session) or marketplace.
+    # The repo at SCRIPT_DIR is the plugin. Add a shell alias for convenience.
+    CC_ALIAS_FILE="${HOME}/.claude/.humbleflow-alias"
+    ALIAS_LINE="alias claude='claude --plugin-dir ${SCRIPT_DIR}'"
 
-    if [ -L "${CC_PLUGIN}" ] || [ -d "${CC_PLUGIN}" ]; then
-        ok "humbleflow already linked for Claude Code"
+    if [ -f "${CC_ALIAS_FILE}" ]; then
+        ok "Plugin dir already configured"
     else
-        mkdir -p "$(dirname "${CC_PLUGIN}")"
-        ln -sfn "${SCRIPT_DIR}" "${CC_PLUGIN}"
-        ok "Linked → ${CC_PLUGIN}"
-        ok "Run /reload-plugins in Claude Code to activate"
+        mkdir -p "${HOME}/.claude"
+        echo "${ALIAS_LINE}" > "${CC_ALIAS_FILE}"
+        ok "Wrote alias → ${CC_ALIAS_FILE}"
     fi
 
     say ""
-    say "  Or test directly:"
+    say "  Add this to your shell rc file (~/.bashrc, ~/.zshrc):"
+    say "    ${CYAN}source ~/.claude/.humbleflow-alias${RESET}"
+    say ""
+    say "  Or start Claude Code with the flag directly:"
     say "    ${CYAN}claude --plugin-dir ${SCRIPT_DIR}${RESET}"
 fi
 
@@ -132,7 +129,7 @@ say ""
 say "${BOLD}── CLI ──${RESET}"
 
 if command -v humbleflow &>/dev/null; then
-    ok "humbleflow CLI already on PATH"
+    ok "CLI already on PATH"
 else
     if command -v npm &>/dev/null; then
         info "npm linking..."
@@ -144,7 +141,7 @@ else
         }
     else
         warn "npm not found. Run directly:"
-        say "  ${CYAN}${SCRIPT_DIR}/humbleflow${RESET} init . --name \"MyApp\" --domains \"auth,billing\""
+        say "  ${CYAN}${SCRIPT_DIR}/humbleflow${RESET} init . --name \"MyApp\" --domains \"auth\""
     fi
 fi
 
@@ -155,16 +152,13 @@ say "${BOLD}═══ Done ═══${RESET}"
 
 if $PI_AVAILABLE; then
     say "  Pi:           ${GREEN}✓${RESET}  /humbleflow-init, /humbleflow-implement, ..."
-else
-    say "  Pi:           —   (pi install git:github.com/tahopetis/humbleflow)"
 fi
-
 if $CLAUDE_AVAILABLE; then
-    say "  Claude Code:  ${GREEN}✓${RESET}  /humbleflow:init, /humbleflow:implement, ..."
+    say "  Claude Code:  ${GREEN}✓${RESET}  source ~/.claude/.humbleflow-alias"
+    say "                then: /humbleflow:init, /humbleflow:implement, ..."
 else
     say "  Claude Code:  —   (claude --plugin-dir ${SCRIPT_DIR})"
 fi
-
 say "  CLI:          ${GREEN}✓${RESET}  humbleflow init"
 say ""
 say "Start building:"

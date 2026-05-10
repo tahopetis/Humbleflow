@@ -11,7 +11,7 @@ A multi-platform, agent-first SDLC — based on [OpenAI's Harness Engineering pr
 curl -fsSL https://raw.githubusercontent.com/tahopetis/Humbleflow/master/install.sh | bash
 ```
 Detects Pi and/or Claude Code and installs for whichever are available.
-Falls back to CLI-only if neither is found.
+For Claude Code, run `source ~/.claude/.humbleflow-alias` (add to your shell rc for persistence). Then:Falls back to CLI-only if neither is found.
 
 ### From npm (if published)
 ```bash
@@ -32,11 +32,14 @@ pi install git:github.com/tahopetis/humbleflow
 
 **Claude Code**
 ```bash
+# After running install.sh:
+source ~/.claude/.humbleflow-alias
+
+# Or use the flag directly:
+claude --plugin-dir ~/.humbleflow
+
 # Via marketplace (once published):
 /plugin install humbleflow@<marketplace>
-
-# Or test locally:
-claude --plugin-dir /path/to/humbleflow
 ```
 
 **CLI only**
