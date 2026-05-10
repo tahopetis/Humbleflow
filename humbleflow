@@ -150,6 +150,10 @@ def generate_repo_map(slug: str) -> str:
 {slug}/
 ├── AGENTS.md              ← You are here. Start every task by reading this.
 ├── WORKFLOW.md            ← Human-readable SDLC specification.
+├── SPEC.md                ← Project vision, users, MVP, capabilities, constraints.
+│                             Updated automatically when features ship.
+├── BACKLOG.md             ← Prioritized queue: Now → Next → Later → Done.
+│                             Add new requirements by telling the human.
 │
 ├── docs/                  ← System of record. Knowledge base.
 │   ├── architecture.md    ← Domain map, layered architecture, dependency rules.

@@ -38,8 +38,8 @@ Escalate when stuck              Run linters & fix violations
 | **Implement** | Agent writes code depth-first, adds tests, self-reviews, runs linters | Watch the PR. You don't need to review every line. |
 | **Review** | 2-3 fresh-context agents perform adversarial review | Optional. You can review, but agents review each other primarily. |
 | **QA** | Agent reproduces bugs, validates fixes, captures evidence | For user-facing changes: verify the evidence. |
-| **Merge** | Agent runs final checks, squashes, merges, updates plan | Approve the merge. Only escalate for architectural concerns. |
-| **Maintain** | Background agents scan for drift, open refactoring PRs | Review refactoring PRs in < 1 minute. Auto-merge most. |
+| **Merge** | Agent runs final checks, squashes, merges, updates plan, updates SPEC.md Capabilities, checks BACKLOG.md for next item | Approve the merge. Only escalate for architectural concerns. |
+| **Maintain** | Agent checks BACKLOG.md for pending items, reports next to human. Background agents scan for drift, open refactoring PRs | Respond to the "next item?" prompt. Review refactoring PRs in < 1 minute. |
 
 ---
 
@@ -77,8 +77,10 @@ A task is done when:
 2. [ ] All agent reviewers have approved.
 3. [ ] `make lint` passes (boundary + golden principles).
 4. [ ] Execution plan is updated with completion notes and decisions.
-5. [ ] Quality grades are updated (`make quality`).
-6. [ ] PR is merged.
+5. [ ] **SPEC.md Capabilities** is updated with the completed feature.
+6. [ ] **BACKLOG.md** is checked — completed item moved to Done, next item surfaced.
+7. [ ] Quality grades are updated (`make quality`).
+8. [ ] PR is merged.
 
 ---
 
@@ -135,9 +137,13 @@ The quality grades are:
 ## Repository Map (for Humans)
 
 ```
-humbleflow/
+my-project/
 ├── AGENTS.md              ← Agent's entry point. Read this to understand their view.
 ├── WORKFLOW.md            ← You are here.
+├── SPEC.md                ← Project vision, users, MVP, capabilities, constraints.
+│                             Auto-updated when features ship.
+├── BACKLOG.md             ← Prioritized queue: Now → Next → Later → Done.
+│                             Add requirements by telling the agent.
 │
 ├── docs/                  ← System of record. The source of truth.
 │   ├── architecture.md    ← How the code is organized and what depends on what.
@@ -165,10 +171,67 @@ humbleflow/
 
 ## Getting Started
 
-1. **First task:** Type `/plan-feature "describe your first feature"`. The agent will create an execution plan.
-2. **Review the plan:** Check that the acceptance criteria match your intent. Resolve unknowns.
-3. **Implement:** Type `/implement`. The agent will follow the plan.
-4. **Review:** The agent will request peer reviews. You can add yours if you want.
-5. **QA:** The agent validates the change. Review the evidence.
-6. **Merge:** Approve. The agent handles the rest.
-7. **Maintain:** Periodically run `/garbage-collect` or let the scheduled agent handle it.
+### New project (greenfield)
+
+1. **Install:** `pi install git:github.com/tahopetis/humbleflow` (once, globally).
+2. **Create directory:** `mkdir myapp && cd myapp`
+3. **Initialize:** Type `/humbleflow-init`. The agent will ask 6 discovery questions and scaffold everything.
+4. **Review:** Read `SPEC.md` and `BACKLOG.md` to confirm the vision.
+5. **Build:** Type `/implement "Build the MVP"`. The agent reads SPEC.md, creates a plan, and starts building.
+
+### Existing project (brownfield)
+
+1. **Initialize:** Run `humbleflow init . --brownfield` from the CLI.
+2. **Map the codebase:** Type `/plan-feature "describe what exists and what you want to add"`. The agent discovers existing domains.
+3. **Build:** Same as above — the agent creates a plan and implements.
+
+### The daily loop
+
+```
+You tell the agent what you need
+  → Agent adds to BACKLOG.md, asks to prioritize
+    → Agent plans and builds the top item
+      → Agent merges, updates SPEC.md, surfaces next backlog item
+        → You say "yes" or "add this instead"
+```
+
+SPEC.md and BACKLOG.md are YOUR documents. Review them periodically. They're the project's memory — the agent writes them, but you own the vision.
+
+---
+
+## FAQ
+
+### How do I add new requirements after the MVP is built?
+
+Just tell the agent what you need. It adds items to `BACKLOG.md`, asks you to prioritize, then starts on the top item. The loop:
+
+```
+tell → backlog → plan → build → merge → SPEC auto-updates → next backlog item
+```
+
+Example:
+```
+You:   "New requirements: recurring invoices, payment reminders, multi-currency"
+Agent: Adds all three to BACKLOG.md → "All captured. Which first?"
+You:   "Recurring invoices"
+Agent: Plans → builds → merges → "Done. Next: payment reminders?"
+```
+
+### Can I see what's been built so far?
+
+Yes — read `SPEC.md`. The `## Capabilities` section lists every completed feature with checkmarks. It's auto-updated on every merge.
+
+### How do I group work into releases?
+
+Set a `milestone` field in plan frontmatter: `milestone: v1.0`. All plans with the same milestone are part of that release. When the milestone is done, the agent can archive and tag it.
+
+### When do I write code vs. prompt?
+
+You don't write application code. You write prompts. You define what "done" looks like.
+
+The only files you might edit directly are:
+- `SPEC.md` — to refine the vision or update constraints
+- `BACKLOG.md` — to reorder priorities or add items yourself
+- `docs/principles.md` — to encode new taste rules
+
+Everything else is agent-generated and agent-maintained. If you find yourself wanting to edit code, ask instead: "what capability is missing that made the agent get this wrong?" Then encode it into a tool, linter, or documentation.

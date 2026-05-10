@@ -16,11 +16,22 @@ pi install git:github.com/tahopetis/humbleflow
 
 Then initialize your project:
 
+**Pi users (slash command):**
+
 ```bash
-# Option A users: just run the command
+mkdir myapp && cd myapp
+pi
+```
+Then type `/humbleflow-init` — the agent guides you through 6 discovery questions
+and scaffolds everything including SPEC.md + BACKLOG.md.
+
+**CLI users:**
+
+```bash
+# Option A: npm
 humbleflow init . --greenfield --name "MyApp" --domains "auth,billing"
 
-# Option B users: use the full path
+# Option B: Pi package (full path)
 ~/.pi/agent/git/github.com/tahopetis/humbleflow/humbleflow init . --greenfield --name "MyApp"
 ```
 
@@ -31,15 +42,28 @@ humbleflow init . --greenfield --name "MyApp" --domains "auth,billing"
 | Component | What it does |
 |-----------|-------------|
 | **`humbleflow` skill** | Loaded automatically by agents for any SDLC work. Covers all 7 phases: specify → plan → implement → review → QA → merge → maintain. |
-| **5 prompt templates** | `/implement`, `/review`, `/qa`, `/garbage-collect`, `/plan-feature` — one-shot workflows for common tasks. |
-| **`humbleflow` CLI** | One-command project initialization (`humbleflow init`). Greenfield or brownfield. Generates architecture docs, quality tables, and `AGENTS.md` customized to your project. |
+| **6 prompt templates** | `/humbleflow-init`, `/implement`, `/review`, `/qa`, `/garbage-collect`, `/plan-feature` — one-shot workflows for common tasks. |
+| **`humbleflow` CLI** | One-command project initialization (`humbleflow init`). Greenfield or brownfield. Generates SPEC.md, BACKLOG.md, architecture docs, quality tables, and `AGENTS.md` customized to your project. |
 | **7 enforcement tools** | Python linters for boundary validation, golden-principle checks, quality grading, doc gardening, plan validation — plus a `Makefile` that ties them together. |
+| **SPEC.md + BACKLOG.md** | Project vision + prioritized backlog. Agents auto-update SPEC.md on merge and check BACKLOG.md for next work. |
 
 ---
 
 ## Quick Start
 
-### Greenfield (new project)
+### Guided discovery (inside Pi — best for new ideas)
+
+```
+/humbleflow-init
+```
+
+Asks 6 questions one at a time: project name, problem, users, MVP anchor,
+domains, constraints. Then generates `SPEC.md`, `BACKLOG.md`, and scaffolds
+everything. The agent is immediately ready to start building.
+
+---
+
+### Greenfield (CLI — scripted or CI)
 
 ```bash
 humbleflow init ~/projects/myapp --greenfield --name "MyApp" --domains "auth,billing,users"
@@ -78,6 +102,8 @@ humbleflow init ~/projects/myapp --greenfield --name "MyApp" --dry-run
 ```
 humbleflow/
 ├── humbleflow                   ← CLI: humbleflow init / humbleflow version
+├── SPEC.md                      ← Generated during init: vision, users, MVP, constraints
+├── BACKLOG.md                   ← Generated during init: Now → Next → Later → Done
 ├── AGENTS.md                    ← Agent entry point (TOC ~100 lines)
 ├── WORKFLOW.md                  ← Human-readable SDLC guide
 │
@@ -89,6 +115,7 @@ humbleflow/
 │       └── golden-principles.md ← Taste invariants
 │
 ├── prompts/                     ← Pi prompt templates
+│   ├── humbleflow-init.md       ← /humbleflow-init: guided discovery
 │   ├── implement.md             ← /implement: full implementation flow
 │   ├── review.md                ← /review: parallel adversarial review
 │   ├── qa.md                    ← /qa: bug repro → fix → validate
@@ -97,6 +124,7 @@ humbleflow/
 │
 └── templates/                   ← Project scaffolding (copied by humbleflow init)
     ├── AGENTS.md, WORKFLOW.md, Makefile
+    ├── BACKLOG.md               ← Now → Next → Later → Done
     ├── docs/                    ← System of record templates
     ├── plans/                   ← Execution plan infrastructure
     └── tools/                   ← Mechanical enforcement
@@ -115,6 +143,18 @@ Inspired by OpenAI's internal experiment: building a product with **0 lines of m
 | **Taste as code** | `lint-golden.py` checks parse-don't-validate, no YOLO probing, structured logging, naming conventions. |
 | **Corrections over waiting** | Minimal merge gates. Test flakes → re-run. Linter violations → fix, don't block. |
 | **Entropy control** | `/garbage-collect` + `doc-gardener.py` scan for drift, open refactoring PRs, update quality grades. |
+
+### The full loop
+
+```
+/humbleflow-init  →  discover (6 questions) → SPEC.md + BACKLOG.md + scaffold
+/implement        →  build → merge
+                  →  auto-update SPEC.md (capabilities)
+                  →  auto-check BACKLOG.md (report next item)
+/garbage-collect  →  scan drift → refactor → update quality grades
+
+Repeat: /implement → merge → check backlog → next
+```
 
 [Read the full article →](https://openai.com/index/harness-engineering/)
 

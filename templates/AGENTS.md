@@ -28,12 +28,45 @@
 
 ## Repository Map
 
-{{REPO_MAP}}
+```
+{{PROJECT_NAME}}/
+├── AGENTS.md              ← You are here. Start every task by reading this.
+├── SPEC.md                ← Project vision, users, MVP, capabilities, constraints.
+├── BACKLOG.md             ← Prioritized work queue (Now → Next → Later → Done).
+├── WORKFLOW.md            ← Human-readable SDLC specification.
+│
+├── docs/                  ← System of record. Knowledge base.
+│   ├── architecture.md    ← Domain map, layered architecture, dependency rules.
+│   ├── quality.md         ← Quality grades per domain, tracked over time.
+│   └── principles.md      ← Golden principles with rationale.
+│
+├── plans/                 ← Execution plans. First-class, versioned artifacts.
+│   ├── README.md          ← Plan conventions and lifecycle.
+│   ├── template.md        ← Full execution plan template.
+│   ├── template-lightweight.md ← Lightweight plan for small changes.
+│   └── YYYY-MM-DD-*.md    ← Active and completed plans.
+│
+├── tools/                 ← Mechanical enforcement. Run these; don't skip them.
+│   ├── Makefile           ← Entry point: `make lint`, `make quality`, `make garden`.
+│   ├── lint-boundaries.py ← Validates dependency directions per architecture.
+│   ├── lint-golden.py     ← Validates golden principles.
+│   ├── quality-grade.py   ← Scans and updates quality grades.
+│   ├── doc-gardener.py    ← Finds stale docs, opens fix-up reports.
+│   └── validate-plan.py   ← Validates execution plan structure.
+│
+└── .pi/                   ← Pi agent configuration.
+    ├── skills/
+    │   └── humbleflow/    ← The SDLC workflow skill. Load when doing SDLC work.
+    │       ├── SKILL.md
+    │       └── references/
+    └── prompts/           ← Prompt templates for common workflows.
+```
 
 ## How to Work
 
 ### Starting a new task
 
+0. **Check what's been built:** Read `SPEC.md` for project vision and completed capabilities. Read `BACKLOG.md` for upcoming and pending work.
 1. **Read this map** (you're doing it now).
 2. **Determine the task type:**
    - **Bug fix?** → Read `docs/architecture.md` for the affected domain, then follow `/qa`.
@@ -42,6 +75,7 @@
    - **Documentation?** → Update `docs/` directly. Run `make garden` after.
 3. **Load the `humbleflow` skill** for detailed phase instructions.
 4. **Create an execution plan** in `plans/` for anything that takes more than a trivial change.
+5. **If this is a new requirement:** add it to `BACKLOG.md` under the appropriate priority (Now/Next/Later), then ask the human to confirm priority before starting.
 
 ### Before opening a PR
 
@@ -54,8 +88,10 @@
 ### After merge
 
 1. **Update the execution plan** with completion notes and decision log.
-2. **Run `make quality`** to update domain quality grades.
-3. **Delete ephemeral worktrees** if applicable.
+2. **Update SPEC.md:** Append the completed feature to `## Capabilities` with a checkmark. Format: `- [x] Feature name — brief outcome`.
+3. **Update BACKLOG.md:** Move the completed item from Now to Done with a completion date. Report the next pending item to the human: "Done. Next in backlog: [item]. Want to start it?"
+4. **Run `make quality`** to update domain quality grades.
+5. **Delete ephemeral worktrees** if applicable.
 
 ## Key Rules (enforced mechanically by `tools/`)
 
