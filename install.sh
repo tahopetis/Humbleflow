@@ -6,10 +6,10 @@ set -euo pipefail
 # Falls back to CLI-only if neither agent platform is detected.
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/tahopetis/humbleflow/master/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/tahopetis/Humbleflow/master/install.sh | bash
 #   ./install.sh                          # from a local clone
 
-REPO_URL="https://github.com/tahopetis/humbleflow.git"
+REPO_URL="https://github.com/tahopetis/Humbleflow.git"
 REPO_DIR="${HOME}/.humbleflow"
 
 BOLD="\033[1m"

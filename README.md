@@ -8,7 +8,7 @@ A multi-platform, agent-first SDLC — based on [OpenAI's Harness Engineering pr
 
 ### One command (auto-detect)
 ```bash
-curl -fsSL https://raw.githubusercontent.com/tahopetis/humbleflow/master/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/tahopetis/Humbleflow/master/install.sh | bash
 ```
 Detects Pi and/or Claude Code and installs for whichever are available.
 Falls back to CLI-only if neither is found.
