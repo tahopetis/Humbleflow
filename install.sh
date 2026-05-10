@@ -35,8 +35,8 @@ say "${BOLD}humbleflow installer${RESET}"
 say ""
 
 # Are we running from inside a humbleflow clone?
-if [ -f "${BASH_SOURCE[0]}" ] && [ -f "$(dirname "${BASH_SOURCE[0]}")/humbleflow" ]; then
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [ -f "./humbleflow" ] && [ -d "./skills" ]; then
+    SCRIPT_DIR="$(pwd)"
     ok "Using local clone: ${SCRIPT_DIR}"
 else
     # Running from curl pipe — clone the repo
