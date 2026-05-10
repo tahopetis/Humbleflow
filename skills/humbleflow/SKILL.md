@@ -7,6 +7,12 @@ description: >
   the codebase. Covers the full lifecycle from prompt to production with
   mechanical enforcement of architecture, taste, and quality. Do NOT use for
   work outside the SDLC — this is the development workflow, not the application domain.
+when_to_use: >
+  Trigger when the user asks to implement a feature, fix a bug, create an
+  execution plan, review code, validate a fix, refactor, or do any software
+  development task. Also trigger when working with source files in a
+  humbleflow-initialized project (AGENTS.md, SPEC.md, BACKLOG.md present).
+paths: "*.ts,*.tsx,*.py,*.go,*.rs,*.js,*.ts,*.tsx,*.py,*.go,*.rs"
 ---
 
 # Humbleflow

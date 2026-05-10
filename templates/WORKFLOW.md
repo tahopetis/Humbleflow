@@ -47,23 +47,26 @@ Escalate when stuck              Run linters & fix violations
 
 ### Start work
 
-```
-/humbleflow-init   # Guided discovery → SPEC.md + BACKLOG.md + scaffold
-/humbleflow-implement         # Build a feature ("Add two-factor authentication")
-/humbleflow-qa                # Debug and fix ("Password reset emails not being delivered")
-/humbleflow-plan-feature      # Plan a feature ("Build a notification center")
-```
+| Workflow | Pi | Claude Code |
+|----------|----|-------------|
+| Init | `/humbleflow-init` | `/humbleflow:init` or `humbleflow init` CLI |
+| Implement | `/humbleflow-implement` | `/humbleflow:implement "feature"` |
+| QA | `/humbleflow-qa` | `/humbleflow:qa "bug"` |
+| Plan | `/humbleflow-plan-feature` | `/humbleflow:plan-feature "feature"` |
 
 ### Review and validate
 
-```
-/humbleflow-review            # Adversarial review of current PR
-```
+| Workflow | Pi | Claude Code |
+|----------|----|-------------|
+| Review | `/humbleflow-review` | `/humbleflow:review` |
 
 ### Maintain
 
+| Workflow | Pi | Claude Code |
+|----------|----|-------------|
+| GC | `/humbleflow-garbage-collect` | `/humbleflow:garbage-collect` |
+
 ```
-/humbleflow-garbage-collect   # Scan for drift, open cleanup PRs
 make quality       # View current quality grades
 make garden        # Check for stale documentation
 ```
@@ -172,9 +175,9 @@ my-project/
 │   ├── doc-gardener.py    ← Stale doc finder.
 │   └── validate-plan.py   ← Plan structure checker.
 │
-└── .pi/                   ← Agent configuration.
+└── .pi/                   ← Pi integration (if using Pi).
     ├── skills/humbleflow/ ← The SDLC workflow skill.
-    └── prompts/            ← Prompt templates (/humbleflow-implement, /humbleflow-review, etc.).
+    └── prompts/            ← Prompt templates.
 ```
 
 ---
@@ -183,16 +186,19 @@ my-project/
 
 ### New project (greenfield)
 
-1. **Install:** `pi install git:github.com/tahopetis/humbleflow` (once, globally).
+1. **Install:** Install humbleflow for your platform:
+   - Pi: `pi install git:github.com/tahopetis/humbleflow`
+   - Claude Code: `/plugin install humbleflow@<marketplace>` or `claude --plugin-dir <path>`
+   - CLI only: `npm install -g humbleflow`
 2. **Create directory:** `mkdir myapp && cd myapp`
-3. **Initialize:** Type `/humbleflow-init`. The agent will ask 6 discovery questions and scaffold everything.
+3. **Initialize:** Type the init command for your platform. The agent will ask 6 discovery questions and scaffold everything.
 4. **Review:** Read `SPEC.md` and `BACKLOG.md` to confirm the vision.
-5. **Build:** Type `/humbleflow-implement "Build the MVP"`. The agent reads SPEC.md, creates a plan, and starts building.
+5. **Build:** Invoke the implement workflow. The agent reads SPEC.md, creates a plan, and starts building.
 
 ### Existing project (brownfield)
 
 1. **Initialize:** Run `humbleflow init . --brownfield` from the CLI.
-2. **Map the codebase:** Type `/humbleflow-plan-feature "describe what exists and what you want to add"`. The agent discovers existing domains.
+2. **Map the codebase:** Invoke the plan-feature workflow. The agent discovers existing domains.
 3. **Build:** Same as above — the agent creates a plan and implements.
 
 ### The daily loop

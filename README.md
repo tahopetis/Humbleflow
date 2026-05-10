@@ -1,18 +1,48 @@
-# humbleflow · [![pi-package](https://img.shields.io/badge/pi-package-blue)](https://pi.dev/packages)
+# humbleflow · [![pi-package](https://img.shields.io/badge/pi-package-blue)](https://pi.dev/packages) [![claude-code-plugin](https://img.shields.io/badge/claude--code-plugin-green)](https://code.claude.com/docs/en/plugins)
 
-A Pi package for agent-first SDLC — based on [OpenAI's Harness Engineering principles](https://openai.com/index/harness-engineering/). **Humans steer. Agents execute.**
+A multi-platform, agent-first SDLC — based on [OpenAI's Harness Engineering principles](https://openai.com/index/harness-engineering/). **Humans steer. Agents execute.** Supports Pi and Claude Code.
 
 ---
 
 ## Install
 
+### One command (auto-detect)
+```bash
+curl -fsSL https://raw.githubusercontent.com/tahopetis/humbleflow/master/install.sh | bash
+```
+Detects Pi and/or Claude Code and installs for whichever are available.
+Falls back to CLI-only if neither is found.
+
+### From npm (if published)
+```bash
+npx humbleflow install
+```
+
+### Install from local clone
+```bash
+./install.sh
+# or:
+python3 humbleflow install
+```
+
+**Pi**
 ```bash
 pi install git:github.com/tahopetis/humbleflow
 ```
 
-This gives you everything: the `humbleflow` skill (auto-loaded by agents), all 6 prompt templates (`/humbleflow-init`, `/humbleflow-implement`, `/humbleflow-review`, `/humbleflow-qa`, `/humbleflow-garbage-collect`, `/humbleflow-plan-feature`), and the `humbleflow` CLI.
+**Claude Code**
+```bash
+# Via marketplace (once published):
+/plugin install humbleflow@<marketplace>
 
-> **CLI-only alternative:** If you don't use Pi, `npm install -g humbleflow` gives you just the CLI on PATH. No skills or prompts.
+# Or test locally:
+claude --plugin-dir /path/to/humbleflow
+```
+
+**CLI only**
+```bash
+npm install -g humbleflow
+```
 
 ---
 
@@ -21,7 +51,7 @@ This gives you everything: the `humbleflow` skill (auto-loaded by agents), all 6
 | Component | What it does |
 |-----------|-------------|
 | **`humbleflow` skill** | Loaded automatically by agents for any SDLC work. Covers all 7 phases: specify → plan → implement → review → QA → merge → maintain. |
-| **6 prompt templates** | `/humbleflow-init`, `/humbleflow-implement`, `/humbleflow-review`, `/humbleflow-qa`, `/humbleflow-garbage-collect`, `/humbleflow-plan-feature` — one-shot workflows for common tasks. |
+| **6 workflows** | Init, implement, review, QA, garbage-collect, plan-feature — one-shot workflows for common tasks. Works in Pi (`/humbleflow-*`) and Claude Code (`/humbleflow:*`). |
 | **`humbleflow` CLI** | One-command project initialization (`humbleflow init`). Greenfield or brownfield. Generates SPEC.md, BACKLOG.md, architecture docs, quality tables, and `AGENTS.md` customized to your project. |
 | **7 enforcement tools** | Python linters for boundary validation, golden-principle checks, quality grading, doc gardening, plan validation — plus a `Makefile` that ties them together. |
 | **SPEC.md + BACKLOG.md** | Project vision + prioritized backlog. Agents auto-update SPEC.md on merge and check BACKLOG.md for next work. |
@@ -30,19 +60,27 @@ This gives you everything: the `humbleflow` skill (auto-loaded by agents), all 6
 
 ## Quick Start
 
-### Guided discovery (inside Pi — recommended)
+### Guided discovery (agent-driven — recommended)
 
 ```bash
-mkdir myapp && cd myapp && pi
+mkdir myapp && cd myapp
+# Pi:
+pi
+# Type: /humbleflow-init
+
+# Claude Code:
+claude
+# Type: /humbleflow:init
 ```
 
-Type `/humbleflow-init`. The agent asks 6 questions one at a time:
+The agent asks 6 questions one at a time:
 project name, problem, users, MVP anchor, domains, constraints.
 Then generates `SPEC.md` + `BACKLOG.md` and scaffolds everything.
 You're immediately ready to build:
 
 ```
-/humbleflow-implement "Build the MVP"
+# Pi:          /humbleflow-implement "Build the MVP"
+# Claude Code: /humbleflow:implement "Build the MVP"
 ```
 
 ### CLI (terminal, CI, scripting)
@@ -68,12 +106,31 @@ humbleflow/
 ├── AGENTS.md                    ← Agent entry point (TOC ~100 lines)
 ├── WORKFLOW.md                  ← Human-readable SDLC guide
 │
-├── skills/humbleflow/         ← Pi skill (loaded on-demand by agents)
+├── skills/humbleflow/         ← SDLC skill (auto-loaded by agents)
 │   ├── SKILL.md
 │   └── references/
 │       ├── phases.md            ← Phase-by-phase agent instructions
 │       ├── architecture.md      ← Layered architecture rules
 │       └── golden-principles.md ← Taste invariants
+│
+├── commands/                   ← Claude Code workflows
+│   ├── init.md                  ← /humbleflow:init: guided discovery
+│   ├── implement.md             ← /humbleflow:implement: full implementation
+│   ├── review.md                ← /humbleflow:review: adversarial review
+│   ├── qa.md                    ← /humbleflow:qa: bug repro → fix
+│   ├── garbage-collect.md       ← /humbleflow:garbage-collect: drift scan
+│   └── plan-feature.md          ← /humbleflow:plan-feature: spec → plan
+│
+├── agents/                     ← Claude Code review subagents
+│   ├── humbleflow-review-correctness.md
+│   ├── humbleflow-review-tests.md
+│   └── humbleflow-review-simplicity.md
+│
+├── hooks/                      ← Claude Code hooks (post-merge reminders)
+│   └── hooks.json
+│
+├── .claude-plugin/             ← Claude Code plugin manifest
+│   └── plugin.json
 │
 ├── prompts/                     ← Pi prompt templates
 │   ├── humbleflow-init.md       ← /humbleflow-init: guided discovery
@@ -108,13 +165,13 @@ Inspired by OpenAI's internal experiment: building a product with **0 lines of m
 ### The full loop
 
 ```
-/humbleflow-init  →  discover (6 questions) → SPEC.md + BACKLOG.md + scaffold
-/humbleflow-implement        →  build → merge
-                  →  auto-update SPEC.md (capabilities)
-                  →  auto-check BACKLOG.md (report next item)
-/humbleflow-garbage-collect  →  scan drift → refactor → update quality grades
+Init  →  discover (6 questions) → SPEC.md + BACKLOG.md + scaffold
+Implement  →  build → merge
+          →  auto-update SPEC.md (capabilities)
+          →  auto-check BACKLOG.md (report next item)
+Garbage-collect  →  scan drift → refactor → update quality grades
 
-Repeat: /humbleflow-implement → merge → check backlog → next
+Repeat: implement → merge → check backlog → next
 ```
 
 [Read the full article →](https://openai.com/index/harness-engineering/)
@@ -124,7 +181,7 @@ Repeat: /humbleflow-implement → merge → check backlog → next
 ## Requirements
 
 - **Python 3.9+** (for enforcement tools and init script)
-- **Pi** (for skill and prompt template loading)
+- **Pi** or **Claude Code** (for skill and workflow loading)
 - That's it. No npm dependencies, no external services.
 
 ---

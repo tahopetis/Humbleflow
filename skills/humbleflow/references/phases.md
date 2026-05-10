@@ -103,9 +103,10 @@
 
 **Agent instructions:**
 
-1. **Request agent review.** Use the `/humbleflow-review` workflow:
+1. **Request agent review.** Invoke the review workflow:
    - Launches 2-3 fresh-context reviewer agents with distinct angles.
    - Angles: correctness/regressions, tests/validation, simplicity/maintainability.
+   - Pi: `/humbleflow-review` — Claude Code: `/humbleflow:review`
 2. **Read all review feedback.** Do not dismiss any comment.
 3. **Respond to every comment:**
    - If you agree: implement the fix, push an update, reply "Done in [commit]."

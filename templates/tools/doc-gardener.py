@@ -182,7 +182,7 @@ def main() -> int:
             print(detail)
             print()
         print("Garbage collection: Open a fix-up PR for each stale doc.")
-        print("Run `/humbleflow-garbage-collect` to create targeted refactoring PRs.")
+        print("Run the garbage-collect workflow to create targeted refactoring PRs.")
         return 1
 
     print(f"✓ No stale documentation found ({len(doc_files)} docs scanned).")

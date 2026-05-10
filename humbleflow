@@ -4,6 +4,7 @@ humbleflow — Agent-first SDLC workflow, one command to initialize any project.
 
 USAGE:
   humbleflow init <target-dir> [options]
+  humbleflow install          # Auto-detect and install for Pi/Claude Code
   humbleflow version
   humbleflow help
 
@@ -742,8 +743,122 @@ EXAMPLES:
     return init.run()
 
 
+def cmd_install(argv: List[str]) -> int:
+    """Auto-detect Pi/Claude Code and install humbleflow for available platforms."""
+    parser = argparse.ArgumentParser(
+        prog="humbleflow install",
+        description="Auto-detect Pi and/or Claude Code and install humbleflow.")
+    parser.add_argument("--no-pi", action="store_true",
+                        help="Skip Pi install even if detected")
+    parser.add_argument("--no-claude", action="store_true",
+                        help="Skip Claude Code install even if detected")
+    args = parser.parse_args(argv)
+
+    import subprocess as sp
+
+    package_dir = get_package_dir()
+    installed = False
+
+    print(f"\n{BOLD}humbleflow installer{RESET}\n")
+
+    pi_ok = False
+    claude_ok = False
+
+    if not args.no_pi:
+        pi_ok = shutil.which("pi") is not None
+        if pi_ok:
+            print(color("\u2713 Pi detected", GREEN))
+        else:
+            print(color("\u26a0 Pi not found \u2014 skipping", BROWN))
+
+    if not args.no_claude:
+        claude_ok = shutil.which("claude") is not None
+        if claude_ok:
+            print(color("\u2713 Claude Code detected", GREEN))
+        else:
+            print(color("\u26a0 Claude Code not found \u2014 skipping", BROWN))
+
+    # Pi install
+    if pi_ok:
+        print(f"\n{BOLD}\u2500\u2500 Pi \u2500\u2500{RESET}")
+        pi_skills = Path.home() / ".pi" / "agent" / "skills" / "humbleflow"
+        pi_prompts = Path.home() / ".pi" / "agent" / "prompts"
+
+        try:
+            result = sp.run(
+                ["pi", "install", "git:file://" + str(package_dir)],
+                capture_output=True, text=True, timeout=60)
+            if result.returncode == 0:
+                print(color("  \u2713 Installed via pi", GREEN))
+                installed = True
+            else:
+                raise RuntimeError(result.stderr.strip())
+        except Exception:
+            print(color("  \u26a0 pi install failed, manual setup...", BROWN))
+            pi_skills.mkdir(parents=True, exist_ok=True)
+            pi_prompts.mkdir(parents=True, exist_ok=True)
+
+            skills_src = package_dir / "skills" / "humbleflow"
+            if skills_src.is_dir():
+                for f in skills_src.rglob("*"):
+                    if f.is_file():
+                        dst = pi_skills / f.relative_to(skills_src)
+                        dst.parent.mkdir(parents=True, exist_ok=True)
+                        shutil.copy2(f, dst)
+                print(color(f"  \u2713 Skills \u2192 {pi_skills}", GREEN))
+
+            prompts_src = package_dir / "prompts"
+            if prompts_src.is_dir():
+                for f in prompts_src.glob("*.md"):
+                    shutil.copy2(f, pi_prompts / f.name)
+                print(color(f"  \u2713 Prompts \u2192 {pi_prompts}", GREEN))
+
+            installed = True
+
+    # Claude Code install
+    if claude_ok:
+        print(f"\n{BOLD}\u2500\u2500 Claude Code \u2500\u2500{RESET}")
+        cc_plugin = Path.home() / ".claude" / "plugins" / "humbleflow"
+
+        try:
+            cc_plugin.parent.mkdir(parents=True, exist_ok=True)
+            if cc_plugin.is_symlink() or cc_plugin.is_dir():
+                if cc_plugin.is_symlink():
+                    cc_plugin.unlink()
+                else:
+                    shutil.rmtree(cc_plugin)
+            cc_plugin.symlink_to(package_dir)
+            print(color(f"  \u2713 Linked \u2192 {cc_plugin}", GREEN))
+            print(color("  \u2713 Run /reload-plugins in Claude Code to activate", CYAN))
+            installed = True
+        except OSError:
+            print(color("  \u2717 Symlink failed", RED))
+            print(color(f"  Use --plugin-dir directly:", CYAN))
+            print(color(f"    claude --plugin-dir {package_dir}", CYAN))
+
+    # Summary
+    print(f"\n{BOLD}\u2550\u2550\u2550 Done \u2550\u2550\u2550{RESET}")
+
+    if pi_ok:
+        print(color("  Pi:           \u2713  /humbleflow-init, /humbleflow-implement, ...", GREEN))
+    if claude_ok:
+        print(color("  Claude Code:  \u2713  /humbleflow:init, /humbleflow:implement, ...", GREEN))
+
+    if not installed and not pi_ok and not claude_ok:
+        print(color("  No agent platform detected.", BROWN))
+        print()
+        print("  Install manually:")
+        print(color("    Pi:           pi install git:github.com/tahopetis/humbleflow", CYAN))
+        print(color("    Claude Code:  claude --plugin-dir " + str(package_dir), CYAN))
+        print(color('    CLI only:     humbleflow init . --name "MyApp" --domains "auth"', CYAN))
+
+    print()
+    return 0
+
+
 SUBCOMMANDS = {
     "init": cmd_init,
+    "install": cmd_install,
     "version": lambda _: cmd_version(),
     "help": lambda _: cmd_help(),
 }
@@ -764,7 +879,7 @@ def main() -> int:
     handler = SUBCOMMANDS.get(subcmd)
     if handler is None:
         print(f"humbleflow: unknown subcommand '{subcmd}'", file=sys.stderr)
-        print("Available: init, version, help", file=sys.stderr)
+        print("Available: init, install, version, help", file=sys.stderr)
         return 1
 
     return handler(rest)

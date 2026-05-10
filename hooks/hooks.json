@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash(git merge *)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '⚠️  Humbleflow post-merge checklist:\n1. Update SPEC.md Capabilities: append - [x] <feature> — <outcome>\n2. Update BACKLOG.md: move completed item from Now to Done\n3. Report next backlog item to the human: \"Done. Next in backlog: [item]. Want to start it?\"\n4. Run: make quality\n5. Run: make garden\n6. Move plan to plans/completed/ if convention exists\n7. Clean up ephemeral worktrees'"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "review-*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'Review subagent completed. Synthesize findings into must-fix / should-fix / nits.'"
+          }
+        ]
+      }
+    ]
+  }
+}
