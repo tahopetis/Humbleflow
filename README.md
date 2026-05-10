@@ -10,7 +10,7 @@ A Pi package for agent-first SDLC — based on [OpenAI's Harness Engineering pri
 pi install git:github.com/tahopetis/humbleflow
 ```
 
-This gives you everything: the `humbleflow` skill (auto-loaded by agents), all 6 prompt templates (`/humbleflow-init`, `/implement`, `/review`, `/qa`, `/garbage-collect`, `/plan-feature`), and the `humbleflow` CLI.
+This gives you everything: the `humbleflow` skill (auto-loaded by agents), all 6 prompt templates (`/humbleflow-init`, `/humbleflow-implement`, `/humbleflow-review`, `/humbleflow-qa`, `/humbleflow-garbage-collect`, `/humbleflow-plan-feature`), and the `humbleflow` CLI.
 
 > **CLI-only alternative:** If you don't use Pi, `npm install -g humbleflow` gives you just the CLI on PATH. No skills or prompts.
 
@@ -21,7 +21,7 @@ This gives you everything: the `humbleflow` skill (auto-loaded by agents), all 6
 | Component | What it does |
 |-----------|-------------|
 | **`humbleflow` skill** | Loaded automatically by agents for any SDLC work. Covers all 7 phases: specify → plan → implement → review → QA → merge → maintain. |
-| **6 prompt templates** | `/humbleflow-init`, `/implement`, `/review`, `/qa`, `/garbage-collect`, `/plan-feature` — one-shot workflows for common tasks. |
+| **6 prompt templates** | `/humbleflow-init`, `/humbleflow-implement`, `/humbleflow-review`, `/humbleflow-qa`, `/humbleflow-garbage-collect`, `/humbleflow-plan-feature` — one-shot workflows for common tasks. |
 | **`humbleflow` CLI** | One-command project initialization (`humbleflow init`). Greenfield or brownfield. Generates SPEC.md, BACKLOG.md, architecture docs, quality tables, and `AGENTS.md` customized to your project. |
 | **7 enforcement tools** | Python linters for boundary validation, golden-principle checks, quality grading, doc gardening, plan validation — plus a `Makefile` that ties them together. |
 | **SPEC.md + BACKLOG.md** | Project vision + prioritized backlog. Agents auto-update SPEC.md on merge and check BACKLOG.md for next work. |
@@ -42,7 +42,7 @@ Then generates `SPEC.md` + `BACKLOG.md` and scaffolds everything.
 You're immediately ready to build:
 
 ```
-/implement "Build the MVP"
+/humbleflow-implement "Build the MVP"
 ```
 
 ### CLI (terminal, CI, scripting)
@@ -77,11 +77,11 @@ humbleflow/
 │
 ├── prompts/                     ← Pi prompt templates
 │   ├── humbleflow-init.md       ← /humbleflow-init: guided discovery
-│   ├── implement.md             ← /implement: full implementation flow
-│   ├── review.md                ← /review: parallel adversarial review
-│   ├── qa.md                    ← /qa: bug repro → fix → validate
-│   ├── garbage-collect.md       ← /garbage-collect: drift scan → refactor
-│   └── plan-feature.md          ← /plan-feature: spec → execution plan
+│   ├── implement.md             ← /humbleflow-implement: full implementation flow
+│   ├── review.md                ← /humbleflow-review: parallel adversarial review
+│   ├── qa.md                    ← /humbleflow-qa: bug repro → fix → validate
+│   ├── garbage-collect.md       ← /humbleflow-garbage-collect: drift scan → refactor
+│   └── plan-feature.md          ← /humbleflow-plan-feature: spec → execution plan
 │
 └── templates/                   ← Project scaffolding (copied by humbleflow init)
     ├── AGENTS.md, WORKFLOW.md, Makefile
@@ -103,18 +103,18 @@ Inspired by OpenAI's internal experiment: building a product with **0 lines of m
 | **Architecture as code** | `lint-boundaries.py` validates Types→Config→Repo→Service→Runtime→UI dependency directions. |
 | **Taste as code** | `lint-golden.py` checks parse-don't-validate, no YOLO probing, structured logging, naming conventions. |
 | **Corrections over waiting** | Minimal merge gates. Test flakes → re-run. Linter violations → fix, don't block. |
-| **Entropy control** | `/garbage-collect` + `doc-gardener.py` scan for drift, open refactoring PRs, update quality grades. |
+| **Entropy control** | `/humbleflow-garbage-collect` + `doc-gardener.py` scan for drift, open refactoring PRs, update quality grades. |
 
 ### The full loop
 
 ```
 /humbleflow-init  →  discover (6 questions) → SPEC.md + BACKLOG.md + scaffold
-/implement        →  build → merge
+/humbleflow-implement        →  build → merge
                   →  auto-update SPEC.md (capabilities)
                   →  auto-check BACKLOG.md (report next item)
-/garbage-collect  →  scan drift → refactor → update quality grades
+/humbleflow-garbage-collect  →  scan drift → refactor → update quality grades
 
-Repeat: /implement → merge → check backlog → next
+Repeat: /humbleflow-implement → merge → check backlog → next
 ```
 
 [Read the full article →](https://openai.com/index/harness-engineering/)

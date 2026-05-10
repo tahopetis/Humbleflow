@@ -103,7 +103,7 @@
 
 **Agent instructions:**
 
-1. **Request agent review.** Use the `/review` workflow:
+1. **Request agent review.** Use the `/humbleflow-review` workflow:
    - Launches 2-3 fresh-context reviewer agents with distinct angles.
    - Angles: correctness/regressions, tests/validation, simplicity/maintainability.
 2. **Read all review feedback.** Do not dismiss any comment.

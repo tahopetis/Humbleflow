@@ -70,10 +70,10 @@
 2. **Read `SPEC.md`** for project vision and completed capabilities.
 3. **Read `BACKLOG.md`** for prioritized work queue (Now → Next → Later).
 4. **Determine the task type:**
-   - **Bug fix?** → Read `docs/architecture.md` for the affected domain, then follow `/qa`.
-   - **New feature?** → Read `docs/architecture.md`, check `docs/quality.md` for domain grades, create an execution plan in `plans/`, then follow `/implement`.
+   - **Bug fix?** → Read `docs/architecture.md` for the affected domain, then follow `/humbleflow-qa`.
+   - **New feature?** → Read `docs/architecture.md`, check `docs/quality.md` for domain grades, create an execution plan in `plans/`, then follow `/humbleflow-implement`.
    - **New requirement?** → Add to `BACKLOG.md` under the appropriate priority (Now/Next/Later). Ask human to confirm priority before starting.
-   - **Refactoring / cleanup?** → Check `docs/quality.md` for low-grade domains. Follow `/garbage-collect` conventions.
+   - **Refactoring / cleanup?** → Check `docs/quality.md` for low-grade domains. Follow `/humbleflow-garbage-collect` conventions.
    - **Documentation?** → Update `docs/` directly. Run `make garden` after.
 5. **Load the `humbleflow` skill** for detailed phase instructions.
 6. **Create an execution plan** in `plans/` for anything that takes more than a trivial change.
@@ -82,7 +82,7 @@
 
 1. **Run `make lint`** — boundary and golden-principle checks must pass.
 2. **Self-review locally:** read the diff, check for violations of `docs/principles.md`.
-3. **Request agent review:** use `/review` for adversarial review from fresh-context agents.
+3. **Request agent review:** use `/humbleflow-review` for adversarial review from fresh-context agents.
 4. **Respond to all feedback** (agent and human). Iterate until all reviewers are satisfied.
 5. **QA validation** for anything user-facing: reproduce the bug, validate the fix, capture evidence.
 

@@ -125,11 +125,11 @@ Build an agent-first SDLC workflow for the `humbleflow` project, based on OpenAI
 
 | # | Deliverable | Description | Depends on |
 |---|------------|-------------|------------|
-| 4.1 | `.pi/prompts/review.md` | Parallel adversarial review: launches N fresh-context reviewers with distinct angles, synthesizes findings. | 1.1, 1.2 |
-| 4.2 | `.pi/prompts/garbage-collect.md` | Garbage collection pass: scans for drift, opens refactoring PRs, updates quality grades. | 3.3, 3.4 |
-| 4.3 | `.pi/prompts/implement.md` | Full implementation flow: validate state → plan → implement → self-review → iterate → PR. | 1.2 |
-| 4.4 | `.pi/prompts/qa.md` | QA flow: reproduce bug → record video → implement fix → validate → record fix video → PR. | 1.2 |
-| 4.5 | `.pi/prompts/plan-feature.md` | Feature planning: create execution plan from acceptance criteria, identify unknowns, estimate. | 2.1 |
+| 4.1 | `.pi/prompts/humbleflow-review.md` | Parallel adversarial review: launches N fresh-context reviewers with distinct angles, synthesizes findings. | 1.1, 1.2 |
+| 4.2 | `.pi/prompts/humbleflow-garbage-collect.md` | Garbage collection pass: scans for drift, opens refactoring PRs, updates quality grades. | 3.3, 3.4 |
+| 4.3 | `.pi/prompts/humbleflow-implement.md` | Full implementation flow: validate state → plan → implement → self-review → iterate → PR. | 1.2 |
+| 4.4 | `.pi/prompts/humbleflow-qa.md` | QA flow: reproduce bug → record video → implement fix → validate → record fix video → PR. | 1.2 |
+| 4.5 | `.pi/prompts/humbleflow-plan-feature.md` | Feature planning: create execution plan from acceptance criteria, identify unknowns, estimate. | 2.1 |
 
 **Parallelizable:** All 4.x can be written in parallel.
 

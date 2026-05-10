@@ -59,7 +59,7 @@ Read your entire diff. Check against:
 
 ## After PR Opens
 
-1. **Request agent review** using `/review`
+1. **Request agent review** using `/humbleflow-review`
 2. **Respond to all feedback** — agree+fix, disagree+explain, or ask for clarification
 3. **Iterate** until all reviewers are satisfied
 4. **Human review** is optional but respected if given

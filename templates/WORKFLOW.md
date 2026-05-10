@@ -49,21 +49,21 @@ Escalate when stuck              Run linters & fix violations
 
 ```
 /humbleflow-init   # Guided discovery → SPEC.md + BACKLOG.md + scaffold
-/implement         # Build a feature ("Add two-factor authentication")
-/qa                # Debug and fix ("Password reset emails not being delivered")
-/plan-feature      # Plan a feature ("Build a notification center")
+/humbleflow-implement         # Build a feature ("Add two-factor authentication")
+/humbleflow-qa                # Debug and fix ("Password reset emails not being delivered")
+/humbleflow-plan-feature      # Plan a feature ("Build a notification center")
 ```
 
 ### Review and validate
 
 ```
-/review            # Adversarial review of current PR
+/humbleflow-review            # Adversarial review of current PR
 ```
 
 ### Maintain
 
 ```
-/garbage-collect   # Scan for drift, open cleanup PRs
+/humbleflow-garbage-collect   # Scan for drift, open cleanup PRs
 make quality       # View current quality grades
 make garden        # Check for stale documentation
 ```
@@ -174,7 +174,7 @@ my-project/
 │
 └── .pi/                   ← Agent configuration.
     ├── skills/humbleflow/ ← The SDLC workflow skill.
-    └── prompts/            ← Prompt templates (/implement, /review, etc.).
+    └── prompts/            ← Prompt templates (/humbleflow-implement, /humbleflow-review, etc.).
 ```
 
 ---
@@ -187,12 +187,12 @@ my-project/
 2. **Create directory:** `mkdir myapp && cd myapp`
 3. **Initialize:** Type `/humbleflow-init`. The agent will ask 6 discovery questions and scaffold everything.
 4. **Review:** Read `SPEC.md` and `BACKLOG.md` to confirm the vision.
-5. **Build:** Type `/implement "Build the MVP"`. The agent reads SPEC.md, creates a plan, and starts building.
+5. **Build:** Type `/humbleflow-implement "Build the MVP"`. The agent reads SPEC.md, creates a plan, and starts building.
 
 ### Existing project (brownfield)
 
 1. **Initialize:** Run `humbleflow init . --brownfield` from the CLI.
-2. **Map the codebase:** Type `/plan-feature "describe what exists and what you want to add"`. The agent discovers existing domains.
+2. **Map the codebase:** Type `/humbleflow-plan-feature "describe what exists and what you want to add"`. The agent discovers existing domains.
 3. **Build:** Same as above — the agent creates a plan and implements.
 
 ### The daily loop

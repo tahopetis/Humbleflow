@@ -60,11 +60,11 @@ PI_SKILL_FILES = [
 
 # Prompt files copied from package root prompts/ → target .pi/prompts/
 PI_PROMPT_FILES = [
-    "review.md",
-    "implement.md",
-    "qa.md",
-    "garbage-collect.md",
-    "plan-feature.md",
+    "humbleflow-review.md",
+    "humbleflow-implement.md",
+    "humbleflow-qa.md",
+    "humbleflow-garbage-collect.md",
+    "humbleflow-plan-feature.md",
 ]
 
 TEMPLATED_FILES = {

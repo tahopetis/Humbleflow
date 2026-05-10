@@ -113,11 +113,11 @@ Then copy Pi resources from the PACKAGE ROOT (not templates/):
 | Source (package root) | Destination |
 |----------------------|-------------|
 | `skills/humbleflow/*` (all files) | `./.pi/skills/humbleflow/` |
-| `prompts/implement.md` | `./.pi/prompts/implement.md` |
-| `prompts/review.md` | `./.pi/prompts/review.md` |
-| `prompts/qa.md` | `./.pi/prompts/qa.md` |
-| `prompts/garbage-collect.md` | `./.pi/prompts/garbage-collect.md` |
-| `prompts/plan-feature.md` | `./.pi/prompts/plan-feature.md` |
+| `prompts/humbleflow-implement.md` | `./.pi/prompts/humbleflow-implement.md` |
+| `prompts/humbleflow-review.md` | `./.pi/prompts/humbleflow-review.md` |
+| `prompts/humbleflow-qa.md` | `./.pi/prompts/humbleflow-qa.md` |
+| `prompts/humbleflow-garbage-collect.md` | `./.pi/prompts/humbleflow-garbage-collect.md` |
+| `prompts/humbleflow-plan-feature.md` | `./.pi/prompts/humbleflow-plan-feature.md` |
 
 **Important:** Only copy files that don't already exist. If a file exists, skip it and tell the human. Do NOT copy `prompts/humbleflow-init.md` — it's only needed for initialization, not in the project.
 
@@ -226,5 +226,5 @@ Created:
 Next steps:
   1. Read SPEC.md to confirm the vision is correct
   2. Read plans/{{today}}-initial-build.md to review the plan
-  3. Start building: /implement "Build the {{MVP anchor}}"
+  3. Start building: /humbleflow-implement "Build the {{MVP anchor}}"
 ```
