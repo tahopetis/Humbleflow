@@ -104,6 +104,7 @@ Copy and customize these files from the templates directory to the current direc
 | `plans/README.md` | `./plans/README.md` | No changes (generic). |
 | `plans/template.md` | `./plans/template.md` | No changes (generic). |
 | `plans/template-lightweight.md` | `./plans/template-lightweight.md` | No changes (generic). |
+| `BACKLOG.md` | `./BACKLOG.md` | No changes — leave as template. |
 | `tools/*` (all files) | `./tools/` | No changes (generic). |
 | `.pi/skills/humbleflow/*` | `./.pi/skills/humbleflow/` | No changes (generic). |
 | `.pi/prompts/*` | `./.pi/prompts/` | No changes (generic). |

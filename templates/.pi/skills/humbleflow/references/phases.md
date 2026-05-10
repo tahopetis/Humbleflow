@@ -229,15 +229,15 @@ fixes a reported bug.
    make garden    # Find stale docs
    make quality   # Update quality grades
    ```
-2. **Review the `docs/quality.md` report.** Identify domains with degraded grades.
-3. **For each degraded domain:**
+3. **Review the `docs/quality.md` report.** Identify domains with degraded grades.
+4. **For each degraded domain:**
    - Identify the specific violations (boundary, golden principle, test coverage, etc.).
    - Open a targeted refactoring PR for each independent issue.
    - Keep PRs small and reviewable in < 1 minute.
-4. **For stale docs:**
+5. **For stale docs:**
    - Update docs to reflect current code behavior.
    - Delete docs that are no longer relevant (with a tombstone note).
-5. **For pattern drift:**
+6. **For pattern drift:**
    - Scan for hand-rolled implementations of shared utilities.
    - Scan for YOLO-style data probing.
    - Open fix-up PRs.
