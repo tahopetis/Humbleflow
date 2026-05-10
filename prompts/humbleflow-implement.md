@@ -1,5 +1,5 @@
 ---
-description: Full implementation flow: validate state → plan → implement → review → iterate → PR.
+description: Full implementation flow: validate state > plan > implement > review > iterate > PR.
 argument-hint: "<feature-or-change-description>"
 ---
 Implement the following change following the Humbleflow workflow.
