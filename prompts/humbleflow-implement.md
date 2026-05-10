@@ -26,12 +26,12 @@ $ARGUMENTS
 
 Follow the layered architecture, depth-first. Build in this order:
 
-1. **Types** - Define schemas, types, constants first. Everything above depends on these.
-2. **Config** - Domain configuration, feature flags.
-3. **Repo** - Data access, persistence. Parse external data at this boundary.
-4. **Service** - Business logic. Orchestrate repo calls.
-5. **Runtime** - Application bootstrap, routing, middleware.
-6. **UI** - Components, pages, views. Never before the service layer exists.
+1. **Types** — Define schemas, types, constants first. Everything above depends on these.
+2. **Config** — Domain configuration, feature flags.
+3. **Repo** — Data access, persistence. Parse external data at this boundary.
+4. **Service** — Business logic. Orchestrate repo calls.
+5. **Runtime** — Application bootstrap, routing, middleware.
+6. **UI** — Components, pages, views. Never before the service layer exists.
 
 At each layer:
 - Write tests alongside code (test file co-located as `foo.test.ts`)
@@ -60,7 +60,7 @@ Read your entire diff. Check against:
 ## After PR Opens
 
 1. **Request agent review** using `/humbleflow-review`
-2. **Respond to all feedback** - agree+fix, disagree+explain, or ask for clarification
+2. **Respond to all feedback** — agree+fix, disagree+explain, or ask for clarification
 3. **Iterate** until all reviewers are satisfied
 4. **Human review** is optional but respected if given
 
