@@ -66,16 +66,17 @@
 
 ### Starting a new task
 
-0. **Check what's been built:** Read `SPEC.md` for project vision and completed capabilities. Read `BACKLOG.md` for upcoming and pending work.
 1. **Read this map** (you're doing it now).
-2. **Determine the task type:**
+2. **Read `SPEC.md`** for project vision and completed capabilities.
+3. **Read `BACKLOG.md`** for prioritized work queue (Now → Next → Later).
+4. **Determine the task type:**
    - **Bug fix?** → Read `docs/architecture.md` for the affected domain, then follow `/qa`.
    - **New feature?** → Read `docs/architecture.md`, check `docs/quality.md` for domain grades, create an execution plan in `plans/`, then follow `/implement`.
+   - **New requirement?** → Add to `BACKLOG.md` under the appropriate priority (Now/Next/Later). Ask human to confirm priority before starting.
    - **Refactoring / cleanup?** → Check `docs/quality.md` for low-grade domains. Follow `/garbage-collect` conventions.
    - **Documentation?** → Update `docs/` directly. Run `make garden` after.
-3. **Load the `humbleflow` skill** for detailed phase instructions.
-4. **Create an execution plan** in `plans/` for anything that takes more than a trivial change.
-5. **If this is a new requirement:** add it to `BACKLOG.md` under the appropriate priority (Now/Next/Later), then ask the human to confirm priority before starting.
+5. **Load the `humbleflow` skill** for detailed phase instructions.
+6. **Create an execution plan** in `plans/` for anything that takes more than a trivial change.
 
 ### Before opening a PR
 
