@@ -189,6 +189,11 @@ fixes a reported bug.
    ```
 3. **Post-merge:**
    - Update the execution plan: mark as completed, add completion notes and decision log.
+   - **Update SPEC.md:** Append the completed feature to the `## Capabilities` section with a checkmark.
+     Format: `- [x] Feature name — brief outcome of what was built`
+     Example: `- [x] Recurring invoice scheduling — users can create weekly/monthly recurring invoices`
+   - **Check BACKLOG.md:** If `BACKLOG.md` exists and has pending items, report the next item to the human.
+     Ask: "Done. Next in backlog: [item]. Want to start it?"
    - Run `make quality` to update domain quality grades.
    - Move the plan to `plans/completed/` if the convention exists.
 4. **Clean up:** Delete the worktree and any ephemeral resources.
@@ -200,6 +205,8 @@ fixes a reported bug.
 **Exit criteria:**
 - PR is merged.
 - Execution plan is updated and completed.
+- SPEC.md Capabilities updated with completed feature.
+- BACKLOG.md checked (next item reported to human if pending).
 - Quality grades are updated.
 - Ephemeral resources are cleaned up.
 
@@ -215,7 +222,9 @@ fixes a reported bug.
 
 **Agent instructions:**
 
-1. **Scan for drift:**
+1. **Check BACKLOG.md:** If `BACKLOG.md` exists and has pending items, report the next item to the human.
+   Ask if they want to start it. Do not start backlog work without human confirmation.
+2. **Scan for drift:**
    ```bash
    make garden    # Find stale docs
    make quality   # Update quality grades

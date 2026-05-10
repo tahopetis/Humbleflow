@@ -4,6 +4,7 @@ status: draft
 assignedTo: [agent-name]
 blockedBy: [issue-ids or null]
 supersededBy: null
+milestone: [milestone-name or null]
 ---
 
 # Plan: [Feature / Change Name]

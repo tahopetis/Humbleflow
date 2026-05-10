@@ -1,6 +1,7 @@
 ---
 created: [YYYY-MM-DD]
 status: draft
+milestone: [milestone-name or null]
 ---
 
 # [Change Name]

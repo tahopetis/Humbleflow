@@ -38,7 +38,11 @@ Create `SPEC.md` from the answers. Use this exact format:
 {{Answer from Q4}}
 
 ## Capabilities
-<!-- To be expanded as features are built -->
+### Built
+<!-- Completed features appear here after merge -->
+
+### In Progress
+- [ ] MVP: {{MVP anchor}} (see plans/YYYY-MM-DD-initial-build.md)
 
 ## Domains
 {{Domains from Q5, one per line with brief descriptions}}
@@ -51,7 +55,31 @@ Create `SPEC.md` from the answers. Use this exact format:
 **Last updated:** {{today}}
 ```
 
-## Phase 3: Scaffold project
+## Phase 3: Generate BACKLOG.md
+
+Create `BACKLOG.md` with this format:
+
+```markdown
+# Backlog — {{PROJECT_NAME}}
+
+> Items are added during development or via discovery.
+> Mark completed with `[x]` and add a completion date.
+> Prioritization: Now → Next → Later.
+
+## Now (current)
+- [ ] MVP: {{MVP anchor}} — see `plans/YYYY-MM-DD-initial-build.md`
+
+## Next (upcoming)
+<!-- Add items here as requirements come in -->
+
+## Later (future)
+<!-- Park ideas here for later consideration -->
+
+## Done
+<!-- Completed items move here with completion dates -->
+```
+
+## Phase 4: Scaffold project
 
 Find the humbleflow package templates. Check these locations in order:
 - `~/.pi/agent/git/github.com/tahopetis/humbleflow/templates/`
@@ -109,7 +137,7 @@ Generate A-grade rows for every domain + shared, app, providers. Each gets rows 
 
 Replace `{{PROJECT_NAME}}` with the project name. Generate the repository map tree using the project slug (lowercase, hyphens).
 
-## Phase 4: Initial execution plan
+## Phase 5: Initial execution plan
 
 Create `plans/YYYY-MM-DD-initial-build.md` (use today's date) with:
 
@@ -165,7 +193,7 @@ Build the MVP: {{MVP description from Q4}}
 | {{today}} | active | Project initialized. SPEC.md created. Ready for implementation. |
 ```
 
-## Phase 5: Summary
+## Phase 6: Summary
 
 Print a summary:
 
@@ -174,6 +202,7 @@ Print a summary:
 
 Created:
   • SPEC.md — project vision, users, MVP, domains, constraints
+  • BACKLOG.md — prioritized feature backlog (Now/Next/Later)
   • AGENTS.md — agent entry point
   • WORKFLOW.md — human SDLC guide
   • docs/ — architecture, quality grades, golden principles
