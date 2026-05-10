@@ -48,23 +48,33 @@ Escalate when stuck              Run linters & fix violations
 ### Start work
 
 ```
-/implement "Add two-factor authentication to the login flow"
-/qa "Users report that password reset emails are not being delivered"
-/plan-feature "Build a notification center with email, push, and in-app channels"
+/humbleflow-init   # Guided discovery → SPEC.md + BACKLOG.md + scaffold
+/implement         # Build a feature ("Add two-factor authentication")
+/qa                # Debug and fix ("Password reset emails not being delivered")
+/plan-feature      # Plan a feature ("Build a notification center")
 ```
 
 ### Review and validate
 
 ```
-/review           # Adversarial review of current PR
+/review            # Adversarial review of current PR
 ```
 
 ### Maintain
 
 ```
-/garbage-collect  # Scan for drift, open cleanup PRs
-make quality      # View current quality grades
-make garden       # Check for stale documentation
+/garbage-collect   # Scan for drift, open cleanup PRs
+make quality       # View current quality grades
+make garden        # Check for stale documentation
+```
+
+### Organize
+
+```
+# Tell the agent:
+"Add [requirement] to the backlog"
+"What's next in the backlog?"
+"Prioritize the backlog"
 ```
 
 ---
