@@ -55,11 +55,14 @@ HARNESS_FILES = [
     ".pi/prompts/qa.md",
     ".pi/prompts/garbage-collect.md",
     ".pi/prompts/plan-feature.md",
+    "SPEC.md",
+    "BACKLOG.md",
 ]
 
 TEMPLATED_FILES = {
     "AGENTS.md",
     "WORKFLOW.md",
+    "SPEC.md",
     "docs/architecture.md",
     "docs/quality.md",
 }
@@ -328,6 +331,14 @@ def transform_workflow(content: str, name: str, slug: str) -> str:
     return c
 
 
+def transform_spec(content: str, name: str, desc: str) -> str:
+    today_str = date.today().isoformat()
+    c = content.replace("{{PROJECT_NAME}}", name)
+    c = c.replace("{{PROJECT_DESCRIPTION}}", desc)
+    c = c.replace("{{CREATED_DATE}}", today_str)
+    return c
+
+
 def transform_architecture(content: str, name: str, desc: str,
                            domains: List[str]) -> str:
     status = ("Skeleton — this document defines the target architecture. "
@@ -524,6 +535,8 @@ class HarnessInit:
             return transform_agents(content, self.name, self.slug)
         elif rel == "WORKFLOW.md":
             return transform_workflow(content, self.name, self.slug)
+        elif rel == "SPEC.md":
+            return transform_spec(content, self.name, self.description)
         elif rel == "docs/architecture.md":
             return transform_architecture(
                 content, self.name, self.description, self.domains)
