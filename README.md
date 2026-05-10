@@ -4,36 +4,15 @@ A Pi package for agent-first SDLC — based on [OpenAI's Harness Engineering pri
 
 ---
 
-## Quick Install
+## Install
 
 ```bash
-# Option A: npm (CLI on PATH + Pi resources)
-npm install -g humbleflow
-
-# Option B: Pi package (skill + prompts, CLI via full path)
 pi install git:github.com/tahopetis/humbleflow
 ```
 
-Then initialize your project:
+This gives you everything: the `humbleflow` skill (auto-loaded by agents), all 6 prompt templates (`/humbleflow-init`, `/implement`, `/review`, `/qa`, `/garbage-collect`, `/plan-feature`), and the `humbleflow` CLI.
 
-**Pi users (slash command):**
-
-```bash
-mkdir myapp && cd myapp
-pi
-```
-Then type `/humbleflow-init` — the agent guides you through 6 discovery questions
-and scaffolds everything including SPEC.md + BACKLOG.md.
-
-**CLI users:**
-
-```bash
-# Option A: npm
-humbleflow init . --greenfield --name "MyApp" --domains "auth,billing"
-
-# Option B: Pi package (full path)
-~/.pi/agent/git/github.com/tahopetis/humbleflow/humbleflow init . --greenfield --name "MyApp"
-```
+> **CLI-only alternative:** If you don't use Pi, `npm install -g humbleflow` gives you just the CLI on PATH. No skills or prompts.
 
 ---
 
@@ -51,49 +30,31 @@ humbleflow init . --greenfield --name "MyApp" --domains "auth,billing"
 
 ## Quick Start
 
-### Guided discovery (inside Pi — best for new ideas)
-
-```
-/humbleflow-init
-```
-
-Asks 6 questions one at a time: project name, problem, users, MVP anchor,
-domains, constraints. Then generates `SPEC.md`, `BACKLOG.md`, and scaffolds
-everything. The agent is immediately ready to start building.
-
----
-
-### Greenfield (CLI — scripted or CI)
+### Guided discovery (inside Pi — recommended)
 
 ```bash
-humbleflow init ~/projects/myapp --greenfield --name "MyApp" --domains "auth,billing,users"
-cd ~/projects/myapp
-# Agents now auto-load the humbleflow skill. Just prompt:
-#   "Add two-factor authentication to the login flow"
+mkdir myapp && cd myapp && pi
 ```
 
-### Brownfield (existing codebase)
+Type `/humbleflow-init`. The agent asks 6 questions one at a time:
+project name, problem, users, MVP anchor, domains, constraints.
+Then generates `SPEC.md` + `BACKLOG.md` and scaffolds everything.
+You're immediately ready to build:
+
+```
+/implement "Build the MVP"
+```
+
+### CLI (terminal, CI, scripting)
 
 ```bash
-humbleflow init ~/projects/existing-app --brownfield
-# Auto-discovers domains from src/domains/*, grades existing code, warns on overwrites
-cd ~/projects/existing-app
-make all   # Run linters and quality checks on existing code
+humbleflow init . --greenfield --name "MyApp" --domains "auth,billing"
 ```
 
-### Interactive mode
+Copies all harness files + SPEC.md and BACKLOG.md templates.
+Fill in `SPEC.md` or prompt the agent to do it.
 
-```bash
-humbleflow init ~/projects/myapp
-# Prompts for project name, description, domains, and mode
-```
-
-### Dry run
-
-```bash
-humbleflow init ~/projects/myapp --greenfield --name "MyApp" --dry-run
-# Shows what would be created without writing anything
-```
+See the full CLI reference: `humbleflow help`
 
 ---
 
