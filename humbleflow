@@ -46,17 +46,25 @@ HARNESS_FILES = [
     "tools/lint-golden.py",
     "tools/quality-grade.py",
     "tools/validate-plan.py",
-    ".pi/skills/humbleflow/SKILL.md",
-    ".pi/skills/humbleflow/references/phases.md",
-    ".pi/skills/humbleflow/references/architecture.md",
-    ".pi/skills/humbleflow/references/golden-principles.md",
-    ".pi/prompts/review.md",
-    ".pi/prompts/implement.md",
-    ".pi/prompts/qa.md",
-    ".pi/prompts/garbage-collect.md",
-    ".pi/prompts/plan-feature.md",
     "SPEC.md",
     "BACKLOG.md",
+]
+
+# Skill files copied from package root skills/ → target .pi/skills/
+PI_SKILL_FILES = [
+    "humbleflow/SKILL.md",
+    "humbleflow/references/phases.md",
+    "humbleflow/references/architecture.md",
+    "humbleflow/references/golden-principles.md",
+]
+
+# Prompt files copied from package root prompts/ → target .pi/prompts/
+PI_PROMPT_FILES = [
+    "review.md",
+    "implement.md",
+    "qa.md",
+    "garbage-collect.md",
+    "plan-feature.md",
 ]
 
 TEMPLATED_FILES = {
@@ -530,6 +538,33 @@ class HarnessInit:
             shutil.copy2(src, dst)
         print(color(f"  ✓ [{action}] {rel}", GREEN))
 
+    def copy_pi_file(self, source_dir: str, rel: str, dest_prefix: str) -> None:
+        src = self.harness_path / source_dir / rel
+        dst = self.target / dest_prefix / rel
+
+        if not src.exists():
+            print(f"  ✗ Source missing: {src}")
+            return
+
+        action = "CREATE"
+        if dst.exists():
+            if not self.force:
+                self.skipped.append(f"{dest_prefix}/{rel}")
+                print(color(f"  ⊘ Skip (exists, use --force): {dest_prefix}/{rel}", BROWN))
+                return
+            action = "OVERWRITE"
+            self.overwritten.append(f"{dest_prefix}/{rel}")
+        else:
+            self.created.append(f"{dest_prefix}/{rel}")
+
+        if self.dry_run:
+            print(color(f"  ○ [{action}] {dest_prefix}/{rel}", CYAN))
+            return
+
+        ensure_dir(dst.parent)
+        shutil.copy2(src, dst)
+        print(color(f"  ✓ [{action}] {dest_prefix}/{rel}", GREEN))
+
     def apply_placeholders(self, rel: str, content: str) -> str:
         if rel == "AGENTS.md":
             return transform_agents(content, self.name, self.slug)
@@ -573,6 +608,12 @@ class HarnessInit:
 
         for rel in HARNESS_FILES:
             self.copy_file(rel)
+
+        for rel in PI_SKILL_FILES:
+            self.copy_pi_file("skills", rel, ".pi/skills")
+
+        for rel in PI_PROMPT_FILES:
+            self.copy_pi_file("prompts", rel, ".pi/prompts")
 
         print()
         print(f"{BOLD}═══ Summary ═══{RESET}\n")

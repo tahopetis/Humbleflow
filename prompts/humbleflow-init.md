@@ -98,16 +98,28 @@ Copy and customize these files from the templates directory to the current direc
 | `AGENTS.md` | `./AGENTS.md` | Replace `{{PROJECT_NAME}}` with project name. Replace `{{REPO_MAP}}` with generated tree using project slug. |
 | `WORKFLOW.md` | `./WORKFLOW.md` | Replace `Humbleflow` with project name. Replace `humbleflow` with project slug. |
 | `Makefile` | `./Makefile` | No changes (generic). |
-| `docs/architecture.md` | `./docs/architecture.md` | Replace `{{PROJECT_NAME}}`, `{{PROJECT_DESCRIPTION}}`, `{{PROJECT_STATUS}}` with "Skeleton — this document defines the target architecture. Domains are scaffolded but not yet implemented.", `{{DOMAIN_ARCHITECTURE}}` with generated domain sections, `{{PROJECT_DECISIONS}}` with generated decisions. |
-| `docs/quality.md` | `./docs/quality.md` | Replace `{{DOMAIN_QUALITY_ROWS}}`, `{{QUALITY_SUMMARY}}`, `{{QUALITY_YAML}}` with generated content using the domains. |
+| `SPEC.md` | `./SPEC.md` | Replace `{{PROJECT_NAME}}`, `{{PROJECT_DESCRIPTION}}`, `{{CREATED_DATE}}` with today. Then append the rich content generated in Phase 2 (vision, users, MVP, domains, constraints). |
+| `docs/architecture.md` | `./docs/architecture.md` | Replace `{{PROJECT_NAME}}`, `{{PROJECT_DESCRIPTION}}`, `{{PROJECT_STATUS}}`, `{{DOMAIN_ARCHITECTURE}}`, `{{PROJECT_DECISIONS}}`. |
+| `docs/quality.md` | `./docs/quality.md` | Replace `{{DOMAIN_QUALITY_ROWS}}`, `{{QUALITY_SUMMARY}}`, `{{QUALITY_YAML}}`. |
 | `docs/principles.md` | `./docs/principles.md` | No changes (generic). |
 | `plans/README.md` | `./plans/README.md` | No changes (generic). |
 | `plans/template.md` | `./plans/template.md` | No changes (generic). |
 | `plans/template-lightweight.md` | `./plans/template-lightweight.md` | No changes (generic). |
 | `BACKLOG.md` | `./BACKLOG.md` | No changes — leave as template. |
 | `tools/*` (all files) | `./tools/` | No changes (generic). |
-| `.pi/skills/humbleflow/*` | `./.pi/skills/humbleflow/` | No changes (generic). |
-| `.pi/prompts/*` | `./.pi/prompts/` | No changes (generic). |
+
+Then copy Pi resources from the PACKAGE ROOT (not templates/):
+
+| Source (package root) | Destination |
+|----------------------|-------------|
+| `skills/humbleflow/*` (all files) | `./.pi/skills/humbleflow/` |
+| `prompts/implement.md` | `./.pi/prompts/implement.md` |
+| `prompts/review.md` | `./.pi/prompts/review.md` |
+| `prompts/qa.md` | `./.pi/prompts/qa.md` |
+| `prompts/garbage-collect.md` | `./.pi/prompts/garbage-collect.md` |
+| `prompts/plan-feature.md` | `./.pi/prompts/plan-feature.md` |
+
+**Important:** Only copy files that don't already exist. If a file exists, skip it and tell the human. Do NOT copy `prompts/humbleflow-init.md` — it's only needed for initialization, not in the project.
 
 **Important:** Only copy files that don't already exist. If a file exists, skip it and tell the human.
 
