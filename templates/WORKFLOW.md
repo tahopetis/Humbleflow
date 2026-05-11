@@ -33,7 +33,7 @@ Escalate when stuck              Run linters & fix violations
 
 | Phase | What happens | Your role |
 |-------|-------------|-----------|
-| **Specify** | Agent reads your prompt, asks ONE clarifying question, writes acceptance criteria | Answer the question. Approve or refine the criteria. |
+| **Specify** | Agent reads your prompt, surfaces assumptions, presents interpretations if ambiguous, pushes back if a simpler approach exists, asks ONE clarifying question, writes acceptance criteria | Answer the question. Correct assumptions. Choose between interpretations. Approve or refine the criteria. |
 | **Plan** | Agent creates an execution plan with unknowns surfaced | Approve the plan. Resolve unknowns it can't decide. |
 | **Implement** | Agent writes code depth-first, adds tests, self-reviews, runs linters | Watch the PR. You don't need to review every line. |
 | **Review** | 2-3 fresh-context agents perform adversarial review | Optional. You can review, but agents review each other primarily. |

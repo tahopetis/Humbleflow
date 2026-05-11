@@ -38,7 +38,7 @@ human only when judgment is required.
 
 For detailed instructions on each phase, load the reference files:
 
-- **[Specify](references/phases.md#1-specify)** — Translate human intent into acceptance criteria and constraints.
+- **[Specify](references/phases.md#1-specify)** — Surface assumptions, resolve ambiguity, push back on over-building, translate human intent into acceptance criteria and constraints.
 - **[Plan](references/phases.md#2-plan)** — Create execution plans with progress/decision logs.
 - **[Implement](references/phases.md#3-implement)** — Write code, tests, docs. Self-review. Iterate.
 - **[Review](references/phases.md#4-review)** — Agent-to-agent adversarial review. Respond to feedback.
