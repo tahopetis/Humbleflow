@@ -10,7 +10,7 @@
   "license": "MIT",
   "keywords": ["sdlc", "workflow", "code-review", "linting", "quality", "harness-engineering"],
   "skills": "./skills",
-  "commands": "./commands",
+  "commands": ["./commands/init.md", "./commands/implement.md", "./commands/review.md", "./commands/qa.md", "./commands/garbage-collect.md", "./commands/plan-feature.md"],
   "agents": ["./agents/review-correctness.md", "./agents/review-tests.md", "./agents/review-simplicity.md"],
   "hooks": "./hooks/hooks.json"
 }
