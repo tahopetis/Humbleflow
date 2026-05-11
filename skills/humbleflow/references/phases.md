@@ -10,18 +10,10 @@
    - The desired outcome (what changes for the user?)
    - Constraints (performance, security, compatibility)
    - Acceptance criteria (how do we know it's done?)
-2. **State your assumptions explicitly.** Before designing, list what you're assuming
-   about the prompt. If any assumption is wrong, the human can correct it before you
-   waste a cycle.
-3. If the prompt is ambiguous in multiple valid ways, present those interpretations
-   and ask the human to choose. Do not pick one silently.
-4. If a simpler approach exists than what the prompt implies, propose it before
-   implementing. Push back — it's better than over-building.
-5. If anything is still ambiguous after surfacing assumptions and interpretations,
-   ask ONE clarifying question. Do not ask multiple questions at once — pick the
-   single most important unknown.
-6. Translate the specification into acceptance criteria in the execution plan.
-7. Identify which domains are affected (check `docs/architecture.md`).
+2. If anything is ambiguous, ask ONE clarifying question. Do not ask multiple questions
+   at once — pick the single most important unknown.
+3. Translate the specification into acceptance criteria in the execution plan.
+4. Identify which domains are affected (check `docs/architecture.md`).
 
 **Exit criteria:**
 - Acceptance criteria are written and unambiguous.
@@ -69,37 +61,29 @@
 **Agent instructions:**
 
 1. **Validate current state.** Read the files you'll modify. Confirm the plan still makes sense.
-2. **Resolve conflicting patterns.** If you encounter two contradictory patterns in
-   the codebase, follow the more recent or more tested one. Leave a `// TODO(drift)`
-   comment on the older pattern. Surface the conflict in the execution plan's decision
-   log. Do not blend both patterns.
-3. **Implement in depth-first order.** Start with the lowest-level building block
+2. **Implement in depth-first order.** Start with the lowest-level building block
    (types/schemas), then config, then repository, then service, then runtime, then UI.
-4. **Write tests alongside code.** Every new behavior gets a test. Every bug fix gets a
+3. **Write tests alongside code.** Every new behavior gets a test. Every bug fix gets a
    regression test.
-5. **Self-review locally.** Read your entire diff. Check against `docs/principles.md`:
+4. **Self-review locally.** Read your entire diff. Check against `docs/principles.md`:
    - Are data shapes validated at boundaries?
    - Is structured logging used?
    - Are naming conventions followed?
    - Are file sizes reasonable?
-6. **Run the enforcement tools:**
+5. **Run the enforcement tools:**
    ```bash
    make lint
    make validate-plan plans/<your-plan>.md
    ```
-7. **Fix all violations.** The linter output includes remediation instructions.
-8. **Iterate locally** until all checks pass and you're satisfied.
-9. **Open a PR.** Use the execution plan as the PR description.
+6. **Fix all violations.** The linter output includes remediation instructions.
+7. **Iterate locally** until all checks pass and you're satisfied.
+8. **Open a PR.** Use the execution plan as the PR description.
 
 **What NOT to do:**
 - Do not implement UI before the service layer exists.
 - Do not skip tests because "the change is simple."
 - Do not work around linter failures — fix the violation.
 - Do not implement cross-domain changes in a single PR without explicit approval.
-- Do not implement anything not in the plan — no speculative features, no "while I'm
-  here" improvements. If you spot something worth doing, add it to the backlog instead.
-- Do not refactor adjacent code that isn't touched by the plan — correcting drift is
-  the Maintain phase's job, not yours during implementation.
 
 **Exit criteria:**
 - All code, tests, and docs are written.

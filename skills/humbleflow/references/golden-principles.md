@@ -177,11 +177,6 @@ a missing abstraction. Break large files into smaller, focused modules.
 **Why:** In an agent-generated codebase, tests are how agents validate their own
 work. Without tests, agents cannot confidently refactor or extend code.
 
-**Test quality:** Test names and assertions should encode *why* the behavior matters,
-not just *what* it does. `it("applies 8.5% sales tax to comply with CA regulation")`
-is better than `it("calculates total with tax")`. If the business rule changes,
-the test name should make it obvious which tests need updating.
-
 ## Enforcement
 
 Run `make lint` before opening a PR. The linter output includes:
@@ -196,15 +191,3 @@ ERROR: Golden principle violation in src/domains/auth/service/loginService.ts:42
   Found: (response?.data?.user as any)?.profile
   Fix: Parse response with a Zod schema in the repo layer. See docs/principles.md#3-no-yolo-data-probing
 ```
-
-## Agent Escalation
-
-If an agent believes a principle or convention is causing harm (producing worse code
-than ignoring it), it must NOT silently deviate. Instead:
-
-1. Follow the principle as written.
-2. Leave a comment in the PR explaining the concern.
-3. Escalate to a human for a principle change.
-
-Principles evolve through human judgment, not agent rebellion. The "How Principles
-Evolve" section in `docs/principles.md` describes the update process.

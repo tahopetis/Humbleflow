@@ -508,10 +508,6 @@ are also how agents **self-validate**:
 - **Coverage of error paths.** Happy-path tests are table stakes. The real value is
   in testing failures: validation errors, network timeouts, malformed data, concurrency
   edge cases.
-- **Intent-encoding.** Test names and assertions should encode *why* the behavior
-  matters, not just *what* it does. `it("applies 8.5% sales tax to comply with CA regulation")`
-  is better than `it("calculates total with tax")`. If the business rule changes,
-  the test name should make it obvious which tests need updating.
 
 ### Test Organization
 
@@ -578,20 +574,6 @@ ERROR: Golden principle violation
 
 This is the "taste is code" loop: human preference → documentation → mechanical
 enforcement → continuous application.
-
-### Agent Escalation
-
-If an agent believes a principle or convention is causing harm (producing worse code
-than ignoring it), it must NOT silently deviate. Instead:
-
-1. **Follow the principle as written.**
-2. **Leave a comment in the PR** explaining the concern and why the principle feels
-   wrong in this case.
-3. **Escalate to a human** for a principle change.
-
-Principles evolve through human judgment, not agent rebellion. If the escalation
-reveals a real problem, follow the "How Principles Evolve" steps above to update the
-principle document and the linter.
 
 ---
 
