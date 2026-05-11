@@ -11,6 +11,6 @@
   "keywords": ["sdlc", "workflow", "code-review", "linting", "quality", "harness-engineering"],
   "skills": "./skills",
   "commands": "./commands",
-  "agents": "./agents",
+  "agents": ["./agents/review-correctness.md", "./agents/review-tests.md", "./agents/review-simplicity.md"],
   "hooks": "./hooks/hooks.json"
 }
