@@ -102,24 +102,38 @@ if $CLAUDE_AVAILABLE; then
     say ""
     say "${BOLD}── Claude Code ──${RESET}"
 
-    # Claude Code loads plugins via --plugin-dir (session) or marketplace.
-    # The repo at SCRIPT_DIR is the plugin. Add a shell alias for convenience.
-    CC_ALIAS_FILE="${HOME}/.claude/.humbleflow-alias"
-    ALIAS_LINE="alias claude='claude --plugin-dir ${SCRIPT_DIR}'"
+    # Copy commands to ~/.claude/commands/ (standalone mode — works with plain 'claude')
+    CC_HOME="${HOME}/.claude"
+    mkdir -p "${CC_HOME}/commands" "${CC_HOME}/skills/humbleflow" "${CC_HOME}/agents" "${CC_HOME}/hooks"
 
-    if [ -f "${CC_ALIAS_FILE}" ]; then
-        ok "Plugin dir already configured"
-    else
-        mkdir -p "${HOME}/.claude"
-        echo "${ALIAS_LINE}" > "${CC_ALIAS_FILE}"
-        ok "Wrote alias → ${CC_ALIAS_FILE}"
-    fi
+    # Commands → /humbleflow-init, /humbleflow-implement, etc.
+    for cmd in init implement review qa garbage-collect plan-feature; do
+        cp "${SCRIPT_DIR}/commands/${cmd}.md" "${CC_HOME}/commands/humbleflow-${cmd}.md"
+    done
+    ok "Commands → ${CC_HOME}/commands/humbleflow-*.md"
+
+    # Skill → auto-loaded
+    cp -r "${SCRIPT_DIR}/skills/humbleflow/"* "${CC_HOME}/skills/humbleflow/"
+    ok "Skill → ${CC_HOME}/skills/humbleflow/"
+
+    # Agents
+    for agent in review-correctness review-tests review-simplicity; do
+        cp "${SCRIPT_DIR}/agents/${agent}.md" "${CC_HOME}/agents/humbleflow-${agent}.md"
+    done
+    ok "Agents → ${CC_HOME}/agents/humbleflow-review-*.md"
+
+    # Hooks
+    cp "${SCRIPT_DIR}/hooks/hooks.json" "${CC_HOME}/hooks/humbleflow-hooks.json"
+    ok "Hooks → ${CC_HOME}/hooks/humbleflow-hooks.json"
 
     say ""
-    say "  Add this to your shell rc file (~/.bashrc, ~/.zshrc):"
-    say "    ${CYAN}source ~/.claude/.humbleflow-alias${RESET}"
+    say "  Restart Claude Code to pick up the commands."
+    say "  Available: ${CYAN}/humbleflow-init, /humbleflow-implement, /humbleflow-review,${RESET}"
+    say "             ${CYAN}/humbleflow-qa, /humbleflow-garbage-collect, /humbleflow-plan-feature${RESET}"
+
+    # Also offer the plugin approach
     say ""
-    say "  Or start Claude Code with the flag directly:"
+    say "  Plugin mode (alternative, namespaced as /humbleflow:*):"
     say "    ${CYAN}claude --plugin-dir ${SCRIPT_DIR}${RESET}"
 fi
 
@@ -154,10 +168,8 @@ if $PI_AVAILABLE; then
     say "  Pi:           ${GREEN}✓${RESET}  /humbleflow-init, /humbleflow-implement, ..."
 fi
 if $CLAUDE_AVAILABLE; then
-    say "  Claude Code:  ${GREEN}✓${RESET}  source ~/.claude/.humbleflow-alias"
-    say "                then: /humbleflow:init, /humbleflow:implement, ..."
-else
-    say "  Claude Code:  —   (claude --plugin-dir ${SCRIPT_DIR})"
+    say "  Claude Code:  ${GREEN}✓${RESET}  /humbleflow-init, /humbleflow-implement, ..."
+    say "                Restart Claude Code to see commands."
 fi
 say "  CLI:          ${GREEN}✓${RESET}  humbleflow init"
 say ""

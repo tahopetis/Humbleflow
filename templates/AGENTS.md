@@ -111,12 +111,12 @@ the invocation syntax differs:
 
 | Workflow | Pi | Claude Code |
 |----------|----|-------------|
-| Init | `/humbleflow-init` | `/humbleflow:init` or `humbleflow init` CLI |
-| Implement | `/humbleflow-implement` | `/humbleflow:implement` |
-| Review | `/humbleflow-review` | `/humbleflow:review` |
-| QA | `/humbleflow-qa` | `/humbleflow:qa` |
-| Garbage collect | `/humbleflow-garbage-collect` | `/humbleflow:garbage-collect` |
-| Plan feature | `/humbleflow-plan-feature` | `/humbleflow:plan-feature` |
+| Init | `/humbleflow-init` | `/humbleflow-init` or `humbleflow init` CLI |
+| Implement | `/humbleflow-implement` | `/humbleflow-implement` |
+| Review | `/humbleflow-review` | `/humbleflow-review` |
+| QA | `/humbleflow-qa` | `/humbleflow-qa` |
+| Garbage collect | `/humbleflow-garbage-collect` | `/humbleflow-garbage-collect` |
+| Plan feature | `/humbleflow-plan-feature` | `/humbleflow-plan-feature` |
 
 To install the humbleflow plugin:
 - **Pi:** `pi install git:github.com/tahopetis/humbleflow`
