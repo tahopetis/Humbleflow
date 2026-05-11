@@ -1,16 +1,12 @@
 {
   "name": "humbleflow",
   "version": "0.1.0",
-  "description": "Agent-first SDLC workflow based on OpenAI's Harness Engineering principles. Humans steer, agents execute. Covers 7 phases: specify → plan → implement → review → QA → merge → maintain. Includes mechanical enforcement of architecture, taste, and quality.",
+  "description": "Agent-first SDLC workflow based on OpenAI's Harness Engineering principles. Humans steer, agents execute. Covers 7 phases: specify → plan → implement → review → QA → merge → maintain.",
   "author": {
     "name": "tahopetis",
-    "url": "https://github.com/tahopetis/humbleflow"
+    "url": "https://github.com/tahopetis/Humbleflow"
   },
-  "repository": "https://github.com/tahopetis/humbleflow",
+  "repository": "https://github.com/tahopetis/Humbleflow",
   "license": "MIT",
-  "keywords": ["sdlc", "workflow", "code-review", "linting", "quality", "harness-engineering"],
-  "skills": "./skills",
-  "commands": ["./commands/init.md", "./commands/implement.md", "./commands/review.md", "./commands/qa.md", "./commands/garbage-collect.md", "./commands/plan-feature.md"],
-  "agents": ["./agents/review-correctness.md", "./agents/review-tests.md", "./agents/review-simplicity.md"],
-  "hooks": "./hooks/hooks.json"
+  "keywords": ["sdlc", "workflow", "code-review", "linting", "quality", "harness-engineering"]
 }
